@@ -8,6 +8,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 const val TAG = "TestCoroutine"
+
 object Repository {
 
     /**
@@ -16,13 +17,12 @@ object Repository {
     suspend fun querySyncWithContext(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val androidResult = ApiSource.instance.getSK2().await()
-
-                val iosResult = ApiSource.instance.getSK1().await()
+                val bResult = ApiSource.instance.getNetDataB().await()
+                val aResult = ApiSource.instance.getNetDataA().await()
 
                 val result = mutableListOf<CommonBean>().apply {
-                    addAll(iosResult.results)
-                    addAll(androidResult.results)
+                    addAll(aResult.results)
+                    addAll(bResult.results)
                 }
                 result
             } catch (e: Throwable) {
@@ -37,13 +37,13 @@ object Repository {
      */
     suspend fun querySyncNoneWithContext(): List<CommonBean> {
         return try {
-            val androidResult = ApiSource.instance.getSK2().await()
+            val bResult = ApiSource.instance.getNetDataB().await()
 
-            val iosResult = ApiSource.instance.getSK1().await()
+            val aResult = ApiSource.instance.getNetDataA().await()
 
             val result = mutableListOf<CommonBean>().apply {
-                addAll(iosResult.results)
-                addAll(androidResult.results)
+                addAll(aResult.results)
+                addAll(bResult.results)
             }
             result
         } catch (e: Throwable) {
@@ -59,21 +59,21 @@ object Repository {
         return withContext(Dispatchers.Main) {
             try {
                 val androidDeferred = async {
-                    val androidResult = ApiSource.instance.getSK2().await()
-                    androidResult
+                    val bResult = ApiSource.instance.getNetDataB().await()
+                    bResult
                 }
 
                 val iosDeferred = async {
-                    val iosResult = ApiSource.instance.getSK1().await()
-                    iosResult
+                    val aResult = ApiSource.instance.getNetDataA().await()
+                    aResult
                 }
 
-                val androidResult = androidDeferred.await().results
-                val iosResult = iosDeferred.await().results
+                val bResult = androidDeferred.await().results
+                val aResult = iosDeferred.await().results
 
                 val result = mutableListOf<CommonBean>().apply {
-                    addAll(iosResult)
-                    addAll(androidResult)
+                    addAll(aResult)
+                    addAll(bResult)
                 }
                 result
             } catch (e: Throwable) {
@@ -90,29 +90,29 @@ object Repository {
         return withContext(Dispatchers.Main) {
             try {
                 val androidDeferred = async {
-                    val androidResult = ApiSource.instance.getSK2().execute()
-                    if(androidResult.isSuccessful) {
-                        androidResult.body()!!
+                    val bResult = ApiSource.instance.getNetDataB().execute()
+                    if (bResult.isSuccessful) {
+                        bResult.body()!!
                     } else {
-                        throw Throwable("android request failure")
+                        throw Throwable("b request failure")
                     }
                 }
 
                 val iosDeferred = async {
-                    val iosResult = ApiSource.instance.getSK1().execute()
-                    if(iosResult.isSuccessful) {
-                        iosResult.body()!!
+                    val aResult = ApiSource.instance.getNetDataA().execute()
+                    if (aResult.isSuccessful) {
+                        aResult.body()!!
                     } else {
-                        throw Throwable("ios request failure")
+                        throw Throwable("a request failure")
                     }
                 }
 
-                val androidResult = androidDeferred.await().results
-                val iosResult = iosDeferred.await().results
+                val bResult = androidDeferred.await().results
+                val aResult = iosDeferred.await().results
 
                 val result = mutableListOf<CommonBean>().apply {
-                    addAll(iosResult)
-                    addAll(androidResult)
+                    addAll(aResult)
+                    addAll(bResult)
                 }
                 result
             } catch (e: Throwable) {
@@ -125,17 +125,17 @@ object Repository {
     suspend fun adapterCoroutineQuery(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val androidDeferred = ApiSource.callAdapterInstance.getSK2()
+                val androidDeferred = ApiSource.callAdapterInstance.getNetDataB()
 
-                val iosDeferred = ApiSource.callAdapterInstance.getSK1()
+                val iosDeferred = ApiSource.callAdapterInstance.getNetDataA()
 
-                val androidResult = androidDeferred.await().results
+                val bResult = androidDeferred.await().results
 
-                val iosResult = iosDeferred.await().results
+                val aResult = iosDeferred.await().results
 
                 val result = mutableListOf<CommonBean>().apply {
-                    addAll(iosResult)
-                    addAll(androidResult)
+                    addAll(aResult)
+                    addAll(bResult)
                 }
                 result
             } catch (e: Throwable) {

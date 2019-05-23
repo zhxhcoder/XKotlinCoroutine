@@ -20,18 +20,18 @@ import kotlin.coroutines.suspendCoroutine
  */
 interface CallAdapterApiService {
     @GET("data/sk/101110102.html")
-    fun getSK1(): Deferred<CommonResult>
+    fun getNetDataA(): Deferred<CommonResult>
 
     @GET("data/sk/101110101.html")
-    fun getSK2(): Deferred<CommonResult>
+    fun getNetDataB(): Deferred<CommonResult>
 }
 
 interface ApiService {
     @GET("data/sk/101110102.html")
-    fun getSK1(): Call<CommonResult>
+    fun getNetDataA(): Call<CommonResult>
 
     @GET("data/sk/101110101.html")
-    fun getSK2(): Call<CommonResult>
+    fun getNetDataB(): Call<CommonResult>
 }
 
 class ApiSource {
