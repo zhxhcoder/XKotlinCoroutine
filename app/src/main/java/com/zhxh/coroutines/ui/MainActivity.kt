@@ -40,8 +40,8 @@ class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() 
             val time = System.currentTimeMillis()
             view.showLoadingView()
             try {
-                val ganks = Repository.querySyncWithContext()
-                view.showLoadingSuccessView(ganks)
+                val resultList = Repository.querySyncWithContext()
+                view.showLoadingSuccessView(resultList)
             } catch (e: Throwable) {
                 view.showLoadingErrorView()
             } finally {
@@ -139,11 +139,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         loadingBar.showSelf()
     }
 
-    override fun showLoadingSuccessView(granks: List<CommonBean>) {
+    override fun showLoadingSuccessView(resultList: List<CommonBean>) {
         loadingBar.hideSelf()
-        textView.text = "请求结束"
+        textView.text = "请求结束+"
         Toast.makeText(this, "加载成功", Toast.LENGTH_SHORT).show()
-        Log.d(TAG, "请求结果：$granks")
+        Log.d(TAG, "请求结果：$resultList")
     }
 
     override fun showLoadingErrorView() {

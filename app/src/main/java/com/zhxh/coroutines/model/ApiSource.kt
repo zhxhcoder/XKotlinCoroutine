@@ -19,18 +19,18 @@ import kotlin.coroutines.suspendCoroutine
  * http://www.weather.com.cn/data/sk/101110102.html
  */
 interface CallAdapterApiService {
-    @GET("data/sk/101110102.html")
+    @GET("zhxh/list")
     fun getNetDataA(): Deferred<CommonResult>
 
-    @GET("data/sk/101110101.html")
+    @GET("zhxh/array")
     fun getNetDataB(): Deferred<CommonResult>
 }
 
 interface ApiService {
-    @GET("data/sk/101110102.html")
+    @GET("zhxh/list")
     fun getNetDataA(): Call<CommonResult>
 
-    @GET("data/sk/101110101.html")
+    @GET("zhxh/array")
     fun getNetDataB(): Call<CommonResult>
 }
 
@@ -38,14 +38,14 @@ class ApiSource {
     companion object {
         @JvmField
         val callAdapterInstance = Retrofit.Builder()
-            .baseUrl("http://www.weather.com.cn/")
+            .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(CallAdapterApiService::class.java)
 
         @JvmField
         val instance = Retrofit.Builder()
-            .baseUrl("http://www.weather.com.cn/")
+            .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(ApiService::class.java)
     }

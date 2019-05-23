@@ -21,8 +21,8 @@ object Repository {
                 val aResult = ApiSource.instance.getNetDataA().await()
 
                 val result = mutableListOf<CommonBean>().apply {
-                    addAll(aResult.results)
-                    addAll(bResult.results)
+                    addAll(aResult.data)
+                    addAll(bResult.data)
                 }
                 result
             } catch (e: Throwable) {
@@ -42,8 +42,8 @@ object Repository {
             val aResult = ApiSource.instance.getNetDataA().await()
 
             val result = mutableListOf<CommonBean>().apply {
-                addAll(aResult.results)
-                addAll(bResult.results)
+                addAll(aResult.data)
+                addAll(bResult.data)
             }
             result
         } catch (e: Throwable) {
@@ -68,8 +68,8 @@ object Repository {
                     aResult
                 }
 
-                val bResult = androidDeferred.await().results
-                val aResult = iosDeferred.await().results
+                val bResult = androidDeferred.await().data
+                val aResult = iosDeferred.await().data
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult)
@@ -107,8 +107,8 @@ object Repository {
                     }
                 }
 
-                val bResult = androidDeferred.await().results
-                val aResult = iosDeferred.await().results
+                val bResult = androidDeferred.await().data
+                val aResult = iosDeferred.await().data
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult)
@@ -129,9 +129,9 @@ object Repository {
 
                 val iosDeferred = ApiSource.callAdapterInstance.getNetDataA()
 
-                val bResult = androidDeferred.await().results
+                val bResult = androidDeferred.await().data
 
-                val aResult = iosDeferred.await().results
+                val aResult = iosDeferred.await().data
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult)
