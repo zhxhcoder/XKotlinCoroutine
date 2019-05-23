@@ -58,18 +58,18 @@ object Repository {
     suspend fun queryAsyncWithContextForAwait(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val androidDeferred = async {
+                val bDeferred = async {
                     val bResult = ApiSource.instance.getNetDataB().await()
                     bResult
                 }
 
-                val iosDeferred = async {
+                val aDeferred = async {
                     val aResult = ApiSource.instance.getNetDataA().await()
                     aResult
                 }
 
-                val bResult = androidDeferred.await().data
-                val aResult = iosDeferred.await().data
+                val bResult = bDeferred.await().data
+                val aResult = aDeferred.await().data
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult)
@@ -89,7 +89,7 @@ object Repository {
     suspend fun queryAsyncWithContextForNoAwait(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val androidDeferred = async {
+                val bDeferred = async {
                     val bResult = ApiSource.instance.getNetDataB().execute()
                     if (bResult.isSuccessful) {
                         bResult.body()!!
@@ -98,7 +98,7 @@ object Repository {
                     }
                 }
 
-                val iosDeferred = async {
+                val aDeferred = async {
                     val aResult = ApiSource.instance.getNetDataA().execute()
                     if (aResult.isSuccessful) {
                         aResult.body()!!
@@ -107,8 +107,8 @@ object Repository {
                     }
                 }
 
-                val bResult = androidDeferred.await().data
-                val aResult = iosDeferred.await().data
+                val bResult = bDeferred.await().data
+                val aResult = aDeferred.await().data
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult)
@@ -125,13 +125,13 @@ object Repository {
     suspend fun adapterCoroutineQuery(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val androidDeferred = ApiSource.callAdapterInstance.getNetDataB()
+                val bDeferred = ApiSource.callAdapterInstance.getNetDataB()
 
-                val iosDeferred = ApiSource.callAdapterInstance.getNetDataA()
+                val aDeferred = ApiSource.callAdapterInstance.getNetDataA()
 
-                val bResult = androidDeferred.await().data
+                val bResult = bDeferred.await().data
 
-                val aResult = iosDeferred.await().data
+                val aResult = aDeferred.await().data
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult)
