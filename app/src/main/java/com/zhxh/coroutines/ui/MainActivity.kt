@@ -9,8 +9,8 @@ import com.zhxh.coroutines.R
 import com.zhxh.coroutines.base.BasePresenter
 import com.zhxh.coroutines.base.MvpPresenter
 import com.zhxh.coroutines.base.MvpView
-import com.zhxh.coroutines.model.repository.Repository
-import com.zhxh.coroutines.model.repository.TAG
+import com.zhxh.coroutines.model.Repository
+import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.launch

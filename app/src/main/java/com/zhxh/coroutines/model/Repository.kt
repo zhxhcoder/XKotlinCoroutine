@@ -1,7 +1,5 @@
-package com.zhxh.coroutines.model.repository
+package com.zhxh.coroutines.model
 
-import com.zhxh.coroutines.model.ApiSource
-import com.zhxh.coroutines.model.await
 import com.zhxh.coroutines.entities.CommonBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
