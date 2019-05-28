@@ -24,6 +24,7 @@ object Test008 {
         testConcurrent3()
         testConcurrent4()
         testConcurrent5()
+        testConcurrent6()
     }
 
     suspend fun CoroutineScope.massiveRun(action: suspend () -> Unit) {
@@ -147,10 +148,7 @@ object Test008 {
     Kotlin 的密封类很适合这种场景。 我们使用 IncCounter 消息（用来递增计数器）和 GetCounter 消息（用来获取值）来定义 CounterMsg 密封类。
     后者需要发送回复。CompletableDeferred 通信原语表示未来可知（可传达）的单个值， 这里被用于此目的。
     */
-    // 计数器 Actor 的各种类型
-    sealed class CounterMsg
-    object IncCounter : CounterMsg() // 递增计数器的单向消息
-    class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg() // 携带回复的请求
+
 
     // 这个函数启动一个新的计数器 actor
     fun CoroutineScope.counterActor() = actor<CounterMsg> {
@@ -175,3 +173,7 @@ object Test008 {
         counter.close() // 关闭该actor
     }
 }
+// 计数器 Actor 的各种类型
+sealed class CounterMsg
+object IncCounter : CounterMsg() // 递增计数器的单向消息
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg() // 携带回复的请求
