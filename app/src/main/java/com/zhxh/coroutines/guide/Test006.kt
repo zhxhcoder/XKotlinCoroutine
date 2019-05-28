@@ -1,6 +1,7 @@
 package com.zhxh.coroutines.guide
 
 import kotlinx.coroutines.*
+import java.io.IOException
 
 /**
  * Created by zhxh on 2019/05/27
@@ -118,4 +119,139 @@ object Test006 {
         }
         job.join()
     }
+
+    /*
+********************************************
+* 如果一个协程的多个子协程抛出异常将会发生什么？
+* 通常的规则是“第一个异常赢得了胜利”，所以第一个被抛出的异常将会暴露给处理者。
+ * 但也许这会是异常丢失的原因，比如说一个协程在 finally 块中抛出了一个异常。
+ * 这时，多余的异常将会被压制。
+ */
+
+    fun testException5() = runBlocking {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("Caught $exception with suppressed ${exception.suppressed.contentToString()}")
+        }
+        val job = GlobalScope.launch(handler) {
+            launch {
+                try {
+                    delay(Long.MAX_VALUE)
+                } finally {
+                    throw ArithmeticException()
+                }
+            }
+            launch {
+                delay(100)
+                throw IOException()
+            }
+            delay(Long.MAX_VALUE)
+        }
+        job.join()
+    }
+
+    /*
+    ********************************************
+    取消异常是透明的并且会在默认情况下解包：
+    */
+    fun testException6() = runBlocking {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("Caught original $exception")
+        }
+        val job = GlobalScope.launch(handler) {
+            val inner = launch {
+                launch {
+                    launch {
+                        throw IOException()
+                    }
+                }
+            }
+            try {
+                inner.join()
+            } catch (e: CancellationException) {
+                println("Rethrowing CancellationException with original cause")
+                throw e
+            }
+        }
+        job.join()
+    }
+
+    /*
+    ********************************************
+    监督任务：SupervisorJob 可以被用于这些目的。它类似于常规的 Job，唯一的取消异常将只会向下传播。
+    */
+    fun testException7() = runBlocking {
+        val supervisor = SupervisorJob()
+        with(CoroutineScope(coroutineContext + supervisor)) {
+            // 启动第一个子任务——这个示例将会忽略它的异常（不要在实践中这么做！）
+            val firstChild = launch(CoroutineExceptionHandler { _, _ -> }) {
+                println("First child is failing")
+                throw AssertionError("First child is cancelled")
+            }
+            // 启动第二个子任务
+            val secondChild = launch {
+                firstChild.join()
+                // 取消了第一个子任务且没有传播给第二个子任务
+                println("First child is cancelled: ${firstChild.isCancelled}, but second one is still active")
+                try {
+                    delay(Long.MAX_VALUE)
+                } finally {
+                    // 但是取消了监督的传播
+                    println("Second child is cancelled because supervisor is cancelled")
+                }
+            }
+            // 等待直到第一个子任务失败且执行完成
+            firstChild.join()
+            println("Cancelling supervisor")
+            supervisor.cancel()
+            secondChild.join()
+        }
+    }
+    /*
+    ********************************************
+    监督作用域：对于作用域的并发，supervisorScope 可以被用来替代 coroutineScope 来实现相同的目的。
+    它只会单向的传播并且当子任务自身执行失败的时候将它们全部取消。它也会在所有的子任务执行结束前等待，
+     就像 coroutineScope 所做的那样。
+    */
+
+    fun testException8() = runBlocking {
+        try {
+            supervisorScope {
+                val child = launch {
+                    try {
+                        println("Child is sleeping")
+                        delay(Long.MAX_VALUE)
+                    } finally {
+                        println("Child is cancelled")
+                    }
+                }
+                // 使用 yield 来给我们的子任务一个机会来执行打印
+                yield()
+                println("Throwing exception from scope")
+                throw AssertionError()
+            }
+        } catch (e: AssertionError) {
+            println("Caught assertion error")
+        }
+    }
+    /*
+    ********************************************
+    监督协程中的异常：常规的任务和监督任务之间的另一个重要区别是异常处理。
+    每一个子任务应该通过异常处理机制处理自身的异常。
+    这种差异来自于子任务的执行失败不会传播给它的父任务的事实。
+    */
+
+    fun testException9() = runBlocking {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            println("Caught $exception")
+        }
+        supervisorScope {
+            val child = launch(handler) {
+                println("Child throws an exception")
+                throw AssertionError()
+            }
+            println("Scope is completing")
+        }
+        println("Scope is completed")
+    }
 }
+
