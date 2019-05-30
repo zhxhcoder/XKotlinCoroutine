@@ -1,4 +1,4 @@
-package com.zhxh.coroutines.kotlincoroutine
+package com.zhxh.coroutines.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.zhxh.coroutines.R
+import com.zhxh.coroutines.kotlincoroutine.*
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,16 +16,18 @@ import java.lang.ref.WeakReference
 class KotlinCoroutineActivity: AppCompatActivity() {
 
     companion object {
-        val TEST_CASE = listOf(CommonUsage,
-                CompoundUsage,
-                ChannelUsage,
-                DispatcherUsage,
-                CancelUsage,
-                ThreadProducerConsumer,
-                CoroutineProducerConsumer,
-                ExceptionHandleUsage,
-                Callback2CoroutineUsage,
-                SuspendOrBlocking)
+        val TEST_CASE = listOf(
+            CommonUsage,
+            CompoundUsage,
+            ChannelUsage,
+            DispatcherUsage,
+            CancelUsage,
+            ThreadProducerConsumer,
+            CoroutineProducerConsumer,
+            ExceptionHandleUsage,
+            Callback2CoroutineUsage,
+            SuspendOrBlocking
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

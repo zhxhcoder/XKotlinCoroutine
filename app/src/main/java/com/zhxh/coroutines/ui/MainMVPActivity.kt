@@ -12,7 +12,7 @@ import com.zhxh.coroutines.base.MvpView
 import com.zhxh.coroutines.model.Repository
 import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main_mvp.*
 import kotlinx.coroutines.launch
 /**
  * Created by zhxh on 2019/05/19
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_mvp)
         presenter.attachView(this)
         syncWithContextBtn.setOnClickListener {
             presenter.syncWithContext()

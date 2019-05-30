@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.zhxh.coroutines.R
-import com.zhxh.coroutines.kotlincoroutine.KotlinCoroutineActivity
 import kotlinx.android.synthetic.main.activity_guide.*
 
 class GuideActivity : AppCompatActivity() {
