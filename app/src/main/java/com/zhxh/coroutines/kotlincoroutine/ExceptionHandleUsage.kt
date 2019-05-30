@@ -44,5 +44,4 @@ object ExceptionHandleUsage: ITestCase {
             execAndCatch { deferred2.await() }
         }
     }
-
 }

@@ -39,5 +39,4 @@ object Callback2CoroutineUsage: ITestCase {
             }
         }
     }
-
 }

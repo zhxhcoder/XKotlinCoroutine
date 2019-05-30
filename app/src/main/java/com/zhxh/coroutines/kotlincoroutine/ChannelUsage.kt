@@ -33,5 +33,4 @@ object ChannelUsage: ITestCase {
             job.join()
         }
     }
-
 }

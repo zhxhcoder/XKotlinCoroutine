@@ -60,7 +60,6 @@ object CancelUsage: ITestCase {
         parentJob.cancel()
     }
 
-
     override fun test() {
         runBlocking {
             separatedScope()

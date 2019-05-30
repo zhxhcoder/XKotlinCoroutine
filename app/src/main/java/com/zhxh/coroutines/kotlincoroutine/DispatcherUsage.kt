@@ -32,6 +32,5 @@ object DispatcherUsage: ITestCase {
 
             handlerThread.quitSafely()
         }
-
     }
 }

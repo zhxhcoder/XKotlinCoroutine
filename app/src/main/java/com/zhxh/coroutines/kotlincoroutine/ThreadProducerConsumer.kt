@@ -88,5 +88,4 @@ object ThreadProducerConsumer : ITestCase {
             printFormatMsg("ThreadProducerConsumer time = ${System.currentTimeMillis() - before}")
         }
     }
-
 }

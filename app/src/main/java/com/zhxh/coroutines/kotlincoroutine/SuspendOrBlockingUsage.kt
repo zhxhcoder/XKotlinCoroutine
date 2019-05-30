@@ -44,10 +44,11 @@ object SuspendOrBlocking: ITestCase {
 
     override fun test() {
         runBlocking {
-            SuspendOrBlocking.separateAsync()
-            SuspendOrBlocking.separateLaunch()
+            SuspendOrBlocking.run {
+                separateAsync()
+                separateLaunch()
+            }
         }
         printFormatMsg("done test")
     }
-
 }
