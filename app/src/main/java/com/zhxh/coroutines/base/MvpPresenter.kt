@@ -5,8 +5,8 @@ import android.support.annotation.UiThread
 interface MvpPresenter<V : MvpView> {
 
     @UiThread
-    fun attachView(view: V)
+    fun subscribe(view: V)
 
     @UiThread
-    fun detachView()
+    fun unsubscribe()
 }

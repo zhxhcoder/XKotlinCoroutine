@@ -1,3 +1,5 @@
 package com.zhxh.coroutines.base
 
-interface MvpView
+interface MvpView {
+    fun destroyView()
+}

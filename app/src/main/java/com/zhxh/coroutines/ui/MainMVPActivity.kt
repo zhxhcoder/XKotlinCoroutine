@@ -14,17 +14,18 @@ import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
 import kotlinx.android.synthetic.main.activity_main_mvp.*
 import kotlinx.coroutines.launch
+
 /**
  * Created by zhxh on 2019/05/19
  */
 class MainContract {
-    interface View: MvpView {
+    interface View : MvpView {
         fun showLoadingView()
-        fun showLoadingSuccessView(granks: List<CommonBean>)
+        fun showLoadingSuccessView(list: List<CommonBean>)
         fun showLoadingErrorView()
     }
 
-    interface Presenter: MvpPresenter<View> {
+    interface Presenter : MvpPresenter<View> {
         fun syncWithContext()
         fun syncNoneWithContext()
         fun asyncWithContextForAwait()
@@ -33,7 +34,7 @@ class MainContract {
     }
 }
 
-class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() {
+class MainPresenter : MainContract.Presenter, BasePresenter<MainContract.View>() {
 
     override fun syncWithContext() {
         presenterScope.launch {
@@ -55,8 +56,8 @@ class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() 
             val time = System.currentTimeMillis()
             view.showLoadingView()
             try {
-                val ganks = Repository.querySyncNoneWithContext()
-                view.showLoadingSuccessView(ganks)
+                val results = Repository.querySyncNoneWithContext()
+                view.showLoadingSuccessView(results)
             } catch (e: Throwable) {
                 view.showLoadingErrorView()
             } finally {
@@ -70,8 +71,8 @@ class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() 
             val time = System.currentTimeMillis()
             view.showLoadingView()
             try {
-                val ganks = Repository.queryAsyncWithContextForAwait()
-                view.showLoadingSuccessView(ganks)
+                val results = Repository.queryAsyncWithContextForAwait()
+                view.showLoadingSuccessView(results)
             } catch (e: Throwable) {
                 view.showLoadingErrorView()
             } finally {
@@ -85,8 +86,8 @@ class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() 
             val time = System.currentTimeMillis()
             view.showLoadingView()
             try {
-                val ganks = Repository.queryAsyncWithContextForNoAwait()
-                view.showLoadingSuccessView(ganks)
+                val results = Repository.queryAsyncWithContextForNoAwait()
+                view.showLoadingSuccessView(results)
             } catch (e: Throwable) {
                 view.showLoadingErrorView()
             } finally {
@@ -100,8 +101,8 @@ class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() 
             val time = System.currentTimeMillis()
             view.showLoadingView()
             try {
-                val ganks = Repository.adapterCoroutineQuery()
-                view.showLoadingSuccessView(ganks)
+                val results = Repository.adapterCoroutineQuery()
+                view.showLoadingSuccessView(results)
             } catch (e: Throwable) {
                 view.showLoadingErrorView()
             } finally {
@@ -112,12 +113,16 @@ class MainPresenter: MainContract.Presenter, BasePresenter<MainContract.View>() 
 }
 
 class MainActivity : AppCompatActivity(), MainContract.View {
+    override fun destroyView() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     private val presenter = MainPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_mvp)
-        presenter.attachView(this)
+        presenter.subscribe(this)
         syncWithContextBtn.setOnClickListener {
             presenter.syncWithContext()
         }
@@ -139,11 +144,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         loadingBar.showSelf()
     }
 
-    override fun showLoadingSuccessView(resultList: List<CommonBean>) {
+    override fun showLoadingSuccessView(list: List<CommonBean>) {
         loadingBar.hideSelf()
         textView.text = "请求结束+"
         Toast.makeText(this, "加载成功", Toast.LENGTH_SHORT).show()
-        Log.d(TAG, "请求结果：$resultList")
+        Log.d(TAG, "请求结果：$list")
     }
 
     override fun showLoadingErrorView() {
@@ -153,7 +158,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.detachView()
+        presenter.unsubscribe()
     }
 
     override fun onBackPressed() {

@@ -5,15 +5,15 @@ import kotlinx.coroutines.Dispatchers
 
 open class BasePresenter<V : MvpView> : MvpPresenter<V> {
     lateinit var view: V
-    val presenterScope: CoroutineScope by lazy {
+    internal val presenterScope: CoroutineScope by lazy {
         CoroutineScope(Dispatchers.Main + Job())
     }
 
-    override fun attachView(view: V) {
+    override fun subscribe(view: V) {
         this.view = view
     }
 
-    override fun detachView() {
+    override fun unsubscribe() {
         presenterScope.cancel()
     }
 }
