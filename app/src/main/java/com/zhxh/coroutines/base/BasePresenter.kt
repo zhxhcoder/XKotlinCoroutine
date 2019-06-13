@@ -3,7 +3,7 @@ package com.zhxh.coroutines.base
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers
 
-open class BasePresenter<V: MvpView> : MvpPresenter<V> {
+open class BasePresenter<V : MvpView> : MvpPresenter<V> {
     lateinit var view: V
     val presenterScope: CoroutineScope by lazy {
         CoroutineScope(Dispatchers.Main + Job())
