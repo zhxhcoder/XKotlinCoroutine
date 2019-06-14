@@ -46,7 +46,7 @@ interface RxJavaApiService {
 class ApiSource {
     companion object {
         @JvmField
-        val callAdapterInstance = Retrofit.Builder()
+        val deferredInstance = Retrofit.Builder()
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())

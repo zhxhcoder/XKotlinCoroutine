@@ -123,9 +123,9 @@ object Repository {
     suspend fun adapterCoroutineQuery(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val bDeferred = ApiSource.callAdapterInstance.getNetDataB()
+                val bDeferred = ApiSource.deferredInstance.getNetDataB()
 
-                val aDeferred = ApiSource.callAdapterInstance.getNetDataA()
+                val aDeferred = ApiSource.deferredInstance.getNetDataA()
 
                 val bResult = bDeferred.await().data
 
