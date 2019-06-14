@@ -17,7 +17,7 @@ import kotlin.coroutines.suspendCoroutine
  *
  * http://www.weather.com.cn/data/sk/101110102.html
  */
-interface CallAdapterApiService {
+interface DeferredApiService {
     @GET("zhxh/list")
     fun getNetDataA(): Deferred<CommonResult>
 
@@ -33,6 +33,16 @@ interface ApiService {
     fun getNetDataB(): Call<CommonResult>
 }
 
+/*
+//Observable
+interface RxJavaApiService {
+    @GET("zhxh/list")
+    fun getNetDataA(): Observable<CommonResult>
+
+    @GET("zhxh/array")
+    fun getNetDataB(): Observable<CommonResult>
+}*/
+
 class ApiSource {
     companion object {
         @JvmField
@@ -40,7 +50,7 @@ class ApiSource {
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(CallAdapterApiService::class.java)
+            .build().create(DeferredApiService::class.java)
 
         @JvmField
         val instance = Retrofit.Builder()
