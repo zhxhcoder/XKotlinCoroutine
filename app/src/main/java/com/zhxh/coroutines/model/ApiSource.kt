@@ -1,6 +1,5 @@
 package com.zhxh.coroutines.model
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.zhxh.coroutines.entities.CommonResult
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
