@@ -113,6 +113,10 @@ class MainPresenter : MainContract.Presenter, BasePresenter<MainContract.View>()
 }
 
 class MainActivity : AppCompatActivity(), MainContract.View {
+    override fun <T> initView(data: T) {
+        data.toString()
+    }
+
     override fun destroyView() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
