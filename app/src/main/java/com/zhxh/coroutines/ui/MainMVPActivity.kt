@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.Toast
 import com.zhxh.coroutines.R
 import com.zhxh.coroutines.base.BasePresenter
+import com.zhxh.coroutines.base.BaseView
 import com.zhxh.coroutines.base.MvpPresenter
-import com.zhxh.coroutines.base.MvpView
 import com.zhxh.coroutines.model.Repository
 import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
  * Created by zhxh on 2019/05/19
  */
 class MainContract {
-    interface View : MvpView {
+    interface View : BaseView<String> {
         fun showLoadingView()
         fun showLoadingSuccessView(list: List<CommonBean>)
         fun showLoadingErrorView()
@@ -113,8 +113,12 @@ class MainPresenter : MainContract.Presenter, BasePresenter<MainContract.View>()
 }
 
 class MainActivity : AppCompatActivity(), MainContract.View {
-    override fun <T> initView(data: T) {
-        data.toString()
+    override fun loadingIndicator(show: Boolean, msg: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun initView(data: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun destroyView() {
