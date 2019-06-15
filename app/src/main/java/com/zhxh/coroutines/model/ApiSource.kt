@@ -1,6 +1,7 @@
 package com.zhxh.coroutines.model
 
 import com.zhxh.coroutines.entities.CommonResult
+import io.reactivex.Observable
 import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +26,7 @@ interface DeferredApiService {
     fun getNetDataB(): Deferred<CommonResult>
 }
 
-interface ApiService {
+interface CallService {
     @GET("zhxh/list")
     fun getNetDataA(): Call<CommonResult>
 
@@ -33,7 +34,6 @@ interface ApiService {
     fun getNetDataB(): Call<CommonResult>
 }
 
-/*
 //Observable
 interface RxJavaApiService {
     @GET("zhxh/list")
@@ -41,7 +41,7 @@ interface RxJavaApiService {
 
     @GET("zhxh/array")
     fun getNetDataB(): Observable<CommonResult>
-}*/
+}
 
 class ApiSource {
     companion object {
@@ -56,7 +56,7 @@ class ApiSource {
         val instance = Retrofit.Builder()
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(ApiService::class.java)
+            .build().create(CallService::class.java)
     }
 }
 
