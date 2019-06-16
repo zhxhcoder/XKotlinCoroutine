@@ -7,6 +7,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import kotlin.coroutines.resume
@@ -53,7 +54,14 @@ class ApiSource {
             .build().create(DeferredApiService::class.java)
 
         @JvmField
-        val instance = Retrofit.Builder()
+        val rxjavaInstance = Retrofit.Builder()
+            .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(DeferredApiService::class.java)
+
+        @JvmField
+        val callInstance = Retrofit.Builder()
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(CallAPIService::class.java)

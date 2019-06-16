@@ -15,8 +15,8 @@ object Repository {
     suspend fun querySyncWithContext(): List<CommonBean> {
         return withContext(Dispatchers.Main) {
             try {
-                val bResult = ApiSource.instance.getNetDataB().await()
-                val aResult = ApiSource.instance.getNetDataA().await()
+                val bResult = ApiSource.callInstance.getNetDataB().await()
+                val aResult = ApiSource.callInstance.getNetDataA().await()
 
                 val result = mutableListOf<CommonBean>().apply {
                     addAll(aResult.data)
@@ -35,9 +35,9 @@ object Repository {
      */
     suspend fun querySyncNoneWithContext(): List<CommonBean> {
         return try {
-            val bResult = ApiSource.instance.getNetDataB().await()
+            val bResult = ApiSource.callInstance.getNetDataB().await()
 
-            val aResult = ApiSource.instance.getNetDataA().await()
+            val aResult = ApiSource.callInstance.getNetDataA().await()
 
             val result = mutableListOf<CommonBean>().apply {
                 addAll(aResult.data)
@@ -57,12 +57,12 @@ object Repository {
         return withContext(Dispatchers.Main) {
             try {
                 val bDeferred = async {
-                    val bResult = ApiSource.instance.getNetDataB().await()
+                    val bResult = ApiSource.callInstance.getNetDataB().await()
                     bResult
                 }
 
                 val aDeferred = async {
-                    val aResult = ApiSource.instance.getNetDataA().await()
+                    val aResult = ApiSource.callInstance.getNetDataA().await()
                     aResult
                 }
 
@@ -88,7 +88,7 @@ object Repository {
         return withContext(Dispatchers.Main) {
             try {
                 val bDeferred = async {
-                    val bResult = ApiSource.instance.getNetDataB().execute()
+                    val bResult = ApiSource.callInstance.getNetDataB().execute()
                     if (bResult.isSuccessful) {
                         bResult.body()!!
                     } else {
@@ -97,7 +97,7 @@ object Repository {
                 }
 
                 val aDeferred = async {
-                    val aResult = ApiSource.instance.getNetDataA().execute()
+                    val aResult = ApiSource.callInstance.getNetDataA().execute()
                     if (aResult.isSuccessful) {
                         aResult.body()!!
                     } else {
