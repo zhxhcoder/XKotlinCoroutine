@@ -26,7 +26,7 @@ interface DeferredApiService {
     fun getNetDataB(): Deferred<CommonResult>
 }
 
-interface CallService {
+interface CallAPIService {
     @GET("zhxh/list")
     fun getNetDataA(): Call<CommonResult>
 
@@ -56,7 +56,7 @@ class ApiSource {
         val instance = Retrofit.Builder()
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(CallService::class.java)
+            .build().create(CallAPIService::class.java)
     }
 }
 
