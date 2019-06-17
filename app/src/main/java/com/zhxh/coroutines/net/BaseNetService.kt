@@ -2,7 +2,6 @@ package com.zhxh.coroutines.net
 
 import android.util.Log
 import com.google.gson.Gson
-import com.zhxh.coroutines.model.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

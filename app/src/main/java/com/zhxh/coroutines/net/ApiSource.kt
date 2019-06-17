@@ -1,4 +1,4 @@
-package com.zhxh.coroutines.model
+package com.zhxh.coroutines.net
 
 import com.zhxh.coroutines.entities.CommonResult
 import io.reactivex.Observable

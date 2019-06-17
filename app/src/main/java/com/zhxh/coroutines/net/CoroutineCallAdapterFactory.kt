@@ -1,4 +1,4 @@
-package com.zhxh.coroutines.model
+package com.zhxh.coroutines.net
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
