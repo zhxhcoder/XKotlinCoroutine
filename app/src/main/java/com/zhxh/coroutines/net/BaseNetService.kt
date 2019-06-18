@@ -18,7 +18,7 @@ abstract class BaseNetService {
     abstract val baseUrl: String
 
     abstract val interceptor: Interceptor
-    val timeOut: Long
+    val timeout: Long
         get() = 30
 
 
@@ -39,9 +39,9 @@ abstract class BaseNetService {
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         // 设置okHttpClient
         val okHttpClientBuilder = OkHttpClient.Builder().connectTimeout(
-            timeOut, TimeUnit
+            timeout, TimeUnit
                 .SECONDS
-        ).readTimeout(timeOut, TimeUnit.SECONDS).addInterceptor(interceptor).addInterceptor(loggingInterceptor)
+        ).readTimeout(timeout, TimeUnit.SECONDS).addInterceptor(interceptor).addInterceptor(loggingInterceptor)
 
         var retrofit = Retrofit.Builder().client(okHttpClientBuilder.build()).baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

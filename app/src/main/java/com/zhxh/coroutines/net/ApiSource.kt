@@ -58,7 +58,7 @@ class ApiSource {
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .build().create(DeferredApiService::class.java)
+            .build().create(RxJavaApiService::class.java)
 
         @JvmField
         val callInstance = Retrofit.Builder()
