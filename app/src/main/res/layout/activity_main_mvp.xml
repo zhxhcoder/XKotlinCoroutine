@@ -60,6 +60,16 @@
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white"
             android:text="Adapter适配协程请求"/>
+    <Button
+            android:id="@+id/rxjavaBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:text="RxJava请求"/>
 
     <TextView
             android:id="@+id/textView"

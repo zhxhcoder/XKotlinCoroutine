@@ -1,8 +1,10 @@
 package com.zhxh.coroutines.model
 
 import com.zhxh.coroutines.entities.CommonBean
+import com.zhxh.coroutines.entities.CommonResult
 import com.zhxh.coroutines.net.ApiSource
 import com.zhxh.coroutines.net.await
+import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -143,5 +145,9 @@ object Repository {
                 throw e
             }
         }
+    }
+
+    fun rxJavaQuery(): Observable<CommonResult> {
+        return ApiSource.rxjavaInstance.getNetDataA()
     }
 }

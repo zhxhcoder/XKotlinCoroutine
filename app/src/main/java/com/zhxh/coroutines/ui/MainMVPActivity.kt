@@ -2,6 +2,7 @@ package com.zhxh.coroutines.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AndroidException
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -12,6 +13,8 @@ import com.zhxh.coroutines.base.MvpPresenter
 import com.zhxh.coroutines.model.Repository
 import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main_mvp.*
 import kotlinx.coroutines.launch
 
@@ -31,6 +34,7 @@ class MainContract {
         fun asyncWithContextForAwait()
         fun asyncWithContextForNoAwait()
         fun adapterCoroutineQuery()
+        fun rxJavaQuery()
     }
 }
 
@@ -110,9 +114,19 @@ class MainPresenter : MainContract.Presenter, BasePresenter<MainContract.View>()
             }
         }
     }
+
+    override fun rxJavaQuery() {
+
+        val disposable = Repository.rxJavaQuery()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.d("TestCoroutine", "-disposable->")
+            }
+    }
 }
 
-class MainActivity : AppCompatActivity(), MainContract.View {
+class MainMVPActivity : AppCompatActivity(), MainContract.View {
     override fun loadingIndicator(show: Boolean, msg: String) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -144,6 +158,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             presenter.asyncWithContextForNoAwait()
         }
         adapterBtn.setOnClickListener {
+            presenter.adapterCoroutineQuery()
+        }
+        rxjavaBtn.setOnClickListener {
             presenter.adapterCoroutineQuery()
         }
     }

@@ -13,7 +13,7 @@ class GuideActivity : AppCompatActivity() {
         setContentView(R.layout.activity_guide)
 
         btn_main.setOnClickListener {
-            startActivity(Intent(this@GuideActivity, MainActivity::class.java))
+            startActivity(Intent(this@GuideActivity, MainMVPActivity::class.java))
         }
 
         btn_coroutine.setOnClickListener {
