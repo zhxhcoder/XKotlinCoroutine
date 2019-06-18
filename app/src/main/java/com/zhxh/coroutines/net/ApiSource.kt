@@ -85,3 +85,9 @@ suspend fun <T> Call<T>.await(): T {
         })
     }
 }
+
+suspend fun <T> Observable<T>.await(): T {
+    return suspendCoroutine {
+
+    }
+}
