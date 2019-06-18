@@ -121,7 +121,7 @@ class MainPresenter : MainContract.Presenter, BasePresenter<MainContract.View>()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                Log.d("TestCoroutine", "-disposable->")
+                Log.d("TestCoroutine", "-disposable->" + it.data[0].name)
             }
     }
 }

@@ -1,6 +1,7 @@
 package com.zhxh.coroutines.net
 
 import android.util.Log
+import com.zhxh.coroutines.entities.CommonBean
 import com.zhxh.coroutines.entities.CommonResult
 import io.reactivex.Observable
 import kotlinx.coroutines.Deferred
