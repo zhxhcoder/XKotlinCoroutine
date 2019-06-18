@@ -161,7 +161,7 @@ class MainMVPActivity : AppCompatActivity(), MainContract.View {
             presenter.adapterCoroutineQuery()
         }
         rxjavaBtn.setOnClickListener {
-            presenter.adapterCoroutineQuery()
+            presenter.rxJavaQuery()
         }
     }
 
