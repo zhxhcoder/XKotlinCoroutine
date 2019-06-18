@@ -49,7 +49,7 @@ interface RxJavaApiService {
     fun getNetDataA(): Observable<CommonResult>
 
     @GET("zhxh/array")
-    fun getNetDataB(): Observable<CommonResult>
+    fun getNetDataB(): Deferred<CommonResult>
 }
 
 
@@ -87,6 +87,7 @@ class ApiSource {
         val rxjavaInstance = Retrofit.Builder().client(okHttpClientBuilder.build())
             .baseUrl("https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(RxJavaApiService::class.java)
 

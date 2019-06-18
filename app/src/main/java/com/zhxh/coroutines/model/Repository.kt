@@ -5,6 +5,7 @@ import com.zhxh.coroutines.entities.CommonResult
 import com.zhxh.coroutines.net.ApiSource
 import com.zhxh.coroutines.net.await
 import io.reactivex.Observable
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -147,7 +148,11 @@ object Repository {
         }
     }
 
-    fun rxJavaQuery(): Observable<CommonResult> {
+    fun rxJavaQueryA(): Observable<CommonResult> {
         return ApiSource.rxjavaInstance.getNetDataA()
+    }
+
+    fun rxJavaQueryB(): Deferred<CommonResult> {
+        return ApiSource.rxjavaInstance.getNetDataB()
     }
 }

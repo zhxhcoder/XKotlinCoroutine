@@ -2,7 +2,6 @@ package com.zhxh.coroutines.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AndroidException
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -13,10 +12,13 @@ import com.zhxh.coroutines.base.MvpPresenter
 import com.zhxh.coroutines.model.Repository
 import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
+import com.zhxh.coroutines.net.ApiSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main_mvp.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Created by zhxh on 2019/05/19
@@ -34,7 +36,8 @@ class MainContract {
         fun asyncWithContextForAwait()
         fun asyncWithContextForNoAwait()
         fun adapterCoroutineQuery()
-        fun rxJavaQuery()
+        fun rxJavaQueryA()
+        fun rxJavaQueryB()
     }
 }
 
@@ -115,14 +118,21 @@ class MainPresenter : MainContract.Presenter, BasePresenter<MainContract.View>()
         }
     }
 
-    override fun rxJavaQuery() {
+    override fun rxJavaQueryA() {
 
-        val disposable = Repository.rxJavaQuery()
+        val disposable = Repository.rxJavaQueryA()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 Log.d("TestCoroutine", "-disposable->" + it.data[0].name)
             }
+    }
+
+    override fun rxJavaQueryB() {
+        presenterScope.launch {
+            val bDeferred = Repository.rxJavaQueryB()
+            Log.d("TestCoroutine", "-bDeferred->" + bDeferred.await().data[0].name)
+        }
     }
 }
 
@@ -160,8 +170,11 @@ class MainMVPActivity : AppCompatActivity(), MainContract.View {
         adapterBtn.setOnClickListener {
             presenter.adapterCoroutineQuery()
         }
-        rxjavaBtn.setOnClickListener {
-            presenter.rxJavaQuery()
+        rxjavaBtnA.setOnClickListener {
+            presenter.rxJavaQueryA()
+        }
+        rxjavaBtnB.setOnClickListener {
+            presenter.rxJavaQueryB()
         }
     }
 
