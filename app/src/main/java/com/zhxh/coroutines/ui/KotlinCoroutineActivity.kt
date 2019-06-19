@@ -1,7 +1,7 @@
 package com.zhxh.coroutines.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
-class KotlinCoroutineActivity: AppCompatActivity() {
+class KotlinCoroutineActivity: FragmentActivity() {
 
     companion object {
         val TEST_CASE = listOf(
