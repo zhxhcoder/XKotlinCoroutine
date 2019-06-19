@@ -12,13 +12,10 @@ import com.zhxh.coroutines.base.MvpPresenter
 import com.zhxh.coroutines.model.Repository
 import com.zhxh.coroutines.model.TAG
 import com.zhxh.coroutines.entities.CommonBean
-import com.zhxh.coroutines.net.ApiSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main_mvp.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * Created by zhxh on 2019/05/19

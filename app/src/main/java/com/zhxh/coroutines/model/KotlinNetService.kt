@@ -1,5 +1,6 @@
-package com.zhxh.coroutines.net
+package com.zhxh.coroutines.model
 
+import com.zhxh.coroutines.net.BaseNetService
 import okhttp3.Interceptor
 import retrofit2.CallAdapter
 

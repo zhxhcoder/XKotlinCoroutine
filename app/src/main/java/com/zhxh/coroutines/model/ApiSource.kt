@@ -1,4 +1,4 @@
-package com.zhxh.coroutines.net
+package com.zhxh.coroutines.model
 
 import android.util.Log
 import com.zhxh.coroutines.entities.CommonResult

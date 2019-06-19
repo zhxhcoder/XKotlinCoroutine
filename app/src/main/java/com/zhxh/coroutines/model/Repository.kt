@@ -2,8 +2,6 @@ package com.zhxh.coroutines.model
 
 import com.zhxh.coroutines.entities.CommonBean
 import com.zhxh.coroutines.entities.CommonResult
-import com.zhxh.coroutines.net.ApiSource
-import com.zhxh.coroutines.net.await
 import io.reactivex.Observable
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
