@@ -2,7 +2,6 @@ package com.zhxh.coroutines.net
 
 import android.util.Log
 import com.google.gson.Gson
-import com.zhxh.coroutines.model.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -27,8 +26,9 @@ abstract class BaseNetService {
      * @author zhxh
      * @time 2018/6/19
      */
-    abstract fun getCallAdapterFactory(): CallAdapter.Factory
-
+    open fun getCallAdapterFactory(): CallAdapter.Factory {
+        return RxJava2CallAdapterFactory.create()
+    }
 
     val timeout: Long
         get() = 30
@@ -56,8 +56,6 @@ abstract class BaseNetService {
         ).readTimeout(timeout, TimeUnit.SECONDS).addInterceptor(interceptor).addInterceptor(loggingInterceptor)
 
         var retrofit = Retrofit.Builder().client(okHttpClientBuilder.build()).baseUrl(baseUrl)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addCallAdapterFactory(getCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(Gson())).build()
 

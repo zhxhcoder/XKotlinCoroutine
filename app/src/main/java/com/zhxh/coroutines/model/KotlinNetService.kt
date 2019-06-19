@@ -6,6 +6,7 @@ import retrofit2.CallAdapter
 
 
 class KotlinNetService : BaseNetService() {
+    //覆盖时，不覆盖时
     override fun getCallAdapterFactory(): CallAdapter.Factory {
         return CoroutineCallAdapterFactory()
     }
