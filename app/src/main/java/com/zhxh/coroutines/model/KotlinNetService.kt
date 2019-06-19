@@ -1,5 +1,8 @@
 package com.zhxh.coroutines.model
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.readystatesoftware.chuck.ChuckInterceptor
+import com.zhxh.coroutines.base.BaseApplication
 import com.zhxh.coroutines.net.BaseNetService
 import okhttp3.Interceptor
 import retrofit2.CallAdapter
@@ -11,8 +14,13 @@ class KotlinNetService : BaseNetService() {
         return CoroutineCallAdapterFactory()
     }
 
+    override fun getInterceptorList(): List<Interceptor> {
+        return listOf(ChuckInterceptor(BaseApplication.instance), StethoInterceptor())
+    }
+
     override val baseUrl: String
         get() = "https://www.easy-mock.com/mock/5c10abcd8c59f04d2e3a7722/"
+
 
     override val interceptor: Interceptor
         get() = KotlinNetInterceptor()

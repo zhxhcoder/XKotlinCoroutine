@@ -66,6 +66,11 @@ abstract class BaseNetService {
                 .SECONDS
         ).readTimeout(timeout, TimeUnit.SECONDS).addInterceptor(interceptor).addInterceptor(loggingInterceptor)
 
+        for (interceptor in getInterceptorList()) {
+            okHttpClientBuilder.addInterceptor(interceptor)
+        }
+
+
         var retrofit = Retrofit.Builder().client(okHttpClientBuilder.build()).baseUrl(baseUrl)
             .addCallAdapterFactory(getCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(Gson())).build()
