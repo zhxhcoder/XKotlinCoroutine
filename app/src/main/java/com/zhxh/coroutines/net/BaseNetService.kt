@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.CallAdapter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,6 +19,16 @@ abstract class BaseNetService {
     abstract val baseUrl: String
 
     abstract val interceptor: Interceptor
+
+    /**
+     * 方法描述：加上CallAdapter.Factory
+     *
+     * @author zhxh
+     * @time 2018/6/19
+     */
+    abstract fun getCallAdapterFactory(): CallAdapter.Factory
+
+
     val timeout: Long
         get() = 30
 
@@ -46,6 +57,7 @@ abstract class BaseNetService {
         var retrofit = Retrofit.Builder().client(okHttpClientBuilder.build()).baseUrl(baseUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addCallAdapterFactory(getCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(Gson())).build()
 
         return retrofit.create(clazz)
