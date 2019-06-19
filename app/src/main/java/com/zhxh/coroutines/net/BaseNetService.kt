@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 
 abstract class BaseNetService {
@@ -28,6 +29,16 @@ abstract class BaseNetService {
      */
     open fun getCallAdapterFactory(): CallAdapter.Factory {
         return RxJava2CallAdapterFactory.create()
+    }
+
+    /**
+     * 拦截器列表
+     * @author zhxh
+     * @return 拦截器列表
+     * @time 2019/6/19
+     */
+    open fun getInterceptorList(): List<Interceptor> {
+        return ArrayList()
     }
 
     val timeout: Long
