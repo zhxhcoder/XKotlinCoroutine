@@ -151,6 +151,7 @@ class MainMVPActivity : AppCompatActivity(), MainContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_mvp)
+
         presenter.subscribe(this)
         syncWithContextBtn.setOnClickListener {
             presenter.syncWithContext()
