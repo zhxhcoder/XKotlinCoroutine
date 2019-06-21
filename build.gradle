@@ -26,3 +26,12 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+ext {
+    minSdkVersion = 18
+    targetSdkVersion = 28
+    compileSdkVersion = 28
+    buildToolsVersion = '28.0.3'
+
+    supportLibVersion = '28.0.0'
+    okhttp3Version = '3.14.2'
+}
