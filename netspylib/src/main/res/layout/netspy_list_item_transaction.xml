@@ -28,7 +28,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:padding="2dp"
-        android:textAppearance="@style/Chuck.TextAppearance.ListItem"
+        android:textAppearance="@style/NetSpy.TextAppearance.ListItem"
         tools:text="200"/>
 
     <TextView
@@ -38,7 +38,7 @@
         android:layout_toRightOf="@id/code"
         android:layout_toEndOf="@id/code"
         android:padding="2dp"
-        android:textAppearance="@style/Chuck.TextAppearance.ListItem"
+        android:textAppearance="@style/NetSpy.TextAppearance.ListItem"
         tools:text="GET /path/to/some/resource?goes=here"/>
 
     <TextView
@@ -59,8 +59,8 @@
         android:layout_toEndOf="@id/host"
         android:layout_below="@id/path"
         android:layout_marginTop="4dp"
-        android:contentDescription="@string/chuck_ssl"
-        android:src="@drawable/chuck_ic_https_grey_24dp"/>
+        android:contentDescription="@string/netspy_ssl"
+        android:src="@drawable/netspy_ic_https_grey_24dp"/>
 
     <LinearLayout
         android:id="@+id/meta"

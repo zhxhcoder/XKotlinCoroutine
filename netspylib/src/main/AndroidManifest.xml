@@ -3,16 +3,16 @@
     <application>
         <provider
                 android:name=".internal.data.NetSpyContentProvider"
-                android:authorities="${applicationId}.chuck.provider"
+                android:authorities="${applicationId}.netspy.provider"
                 android:exported="false"/>
         <activity
                 android:name=".internal.ui.MainActivity"
-                android:label="@string/chuck_name"
+                android:label="@string/netspy_name"
                 android:launchMode="singleTask"
                 android:taskAffinity="com.creditease.netspy.task"
-                android:theme="@style/Chuck.Theme"/>
+                android:theme="@style/NetSpy.Theme"/>
         <activity android:name=".internal.ui.TransactionActivity"
-                  android:theme="@style/Chuck.Theme"
+                  android:theme="@style/NetSpy.Theme"
                   android:parentActivityName=".internal.ui.MainActivity"/>
         <service
                 android:name=".internal.support.ClearTransactionsService"

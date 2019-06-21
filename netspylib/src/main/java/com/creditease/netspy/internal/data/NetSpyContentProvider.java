@@ -13,6 +13,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/**
+ * Created by zhxh on 2019/06/12
+ */
 public class NetSpyContentProvider extends ContentProvider {
 
     public static Uri TRANSACTION_URI;
@@ -95,7 +98,7 @@ public class NetSpyContentProvider extends ContentProvider {
                 break;
             case TRANSACTION:
                 result = db.delete(LocalCupboard.getInstance().getTable(HttpTransaction.class),
-                        "_id = ?", new String[]{ uri.getPathSegments().get(1) });
+                        "_id = ?", new String[]{uri.getPathSegments().get(1)});
                 break;
         }
         if (result > 0) {
@@ -115,7 +118,7 @@ public class NetSpyContentProvider extends ContentProvider {
                 break;
             case TRANSACTION:
                 result = db.update(LocalCupboard.getInstance().getTable(HttpTransaction.class), contentValues,
-                        "_id = ?", new String[]{ uri.getPathSegments().get(1) });
+                        "_id = ?", new String[]{uri.getPathSegments().get(1)});
                 break;
         }
         if (result > 0) {

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.chuck.MainNetSpyActivity" />
+        <activity android:name=".ui.netspy.MainNetSpyActivity" />
         <activity android:name=".ui.MainMVPActivity" />
         <activity android:name="com.zhxh.coroutines.ui.KotlinCoroutineActivity" />
         <activity android:name=".ui.GuideActivity">

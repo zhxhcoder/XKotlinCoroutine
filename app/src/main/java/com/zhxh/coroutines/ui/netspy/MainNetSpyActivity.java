@@ -1,4 +1,4 @@
-package com.zhxh.coroutines.ui.chuck;
+package com.zhxh.coroutines.ui.netspy;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -21,17 +21,17 @@ public class MainNetSpyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_chuck);
+        setContentView(R.layout.activity_main_netspy);
         findViewById(R.id.do_http).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 doHttpActivity();
             }
         });
-        findViewById(R.id.launch_chuck_directly).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.launch_netspy_directly).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchChuckDirectly();
+                launchNetSpyDirectly();
             }
         });
     }
@@ -44,7 +44,7 @@ public class MainNetSpyActivity extends AppCompatActivity {
                 .build();
     }
 
-    private void launchChuckDirectly() {
+    private void launchNetSpyDirectly() {
         // Optionally launch NetSpy directly from your own app UI
         startActivity(NetSpy.getLaunchIntent(this));
     }

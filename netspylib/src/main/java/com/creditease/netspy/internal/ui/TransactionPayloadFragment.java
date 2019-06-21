@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.creditease.netspy.R;
 import com.creditease.netspy.internal.data.HttpTransaction;
 
+/**
+ * Created by zhxh on 2019/06/12
+ */
 public class TransactionPayloadFragment extends Fragment implements TransactionFragment {
 
     public static final int TYPE_REQUEST = 0;
@@ -47,7 +50,7 @@ public class TransactionPayloadFragment extends Fragment implements TransactionF
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.chuck_fragment_transaction_payload, container, false);
+        View view = inflater.inflate(R.layout.netspy_fragment_transaction_payload, container, false);
         headers = (TextView) view.findViewById(R.id.headers);
         body = (TextView) view.findViewById(R.id.body);
         return view;
@@ -84,7 +87,7 @@ public class TransactionPayloadFragment extends Fragment implements TransactionF
         headers.setVisibility((TextUtils.isEmpty(headersString) ? View.GONE : View.VISIBLE));
         headers.setText(Html.fromHtml(headersString));
         if (!isPlainText) {
-            body.setText(getString(R.string.chuck_body_omitted));
+            body.setText(getString(R.string.netspy_body_omitted));
         } else {
             body.setText(bodyString);
         }

@@ -18,11 +18,11 @@
         android:text="do_http_activity" />
 
     <Button
-        android:id="@+id/launch_chuck_directly"
+        android:id="@+id/launch_netspy_directly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/do_http"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:text="launch_chuck_directly" />
+        android:text="launch_netspy_directly" />
 </RelativeLayout>

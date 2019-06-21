@@ -1,13 +1,15 @@
-
 package com.creditease.netspy.internal.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Created by zhxh on 2019/06/12
+ */
 class NetSpyDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "chuck.db";
+    private static final String DATABASE_NAME = "netspy.db";
     private static final int VERSION = 3;
 
     NetSpyDbOpenHelper(Context context) {

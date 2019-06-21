@@ -56,7 +56,7 @@ public class TransactionActivity extends BaseNetSpyActivity implements LoaderMan
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chuck_activity_transaction);
+        setContentView(R.layout.netspy_activity_transaction);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,7 +86,7 @@ public class TransactionActivity extends BaseNetSpyActivity implements LoaderMan
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.chuck_transaction, menu);
+        inflater.inflate(R.menu.netspy_transaction, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -131,9 +131,9 @@ public class TransactionActivity extends BaseNetSpyActivity implements LoaderMan
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new TransactionOverviewFragment(), getString(R.string.chuck_overview));
-        adapter.addFragment(TransactionPayloadFragment.newInstance(TYPE_REQUEST), getString(R.string.chuck_request));
-        adapter.addFragment(TransactionPayloadFragment.newInstance(TYPE_RESPONSE), getString(R.string.chuck_response));
+        adapter.addFragment(new TransactionOverviewFragment(), getString(R.string.netspy_overview));
+        adapter.addFragment(TransactionPayloadFragment.newInstance(TYPE_REQUEST), getString(R.string.netspy_request));
+        adapter.addFragment(TransactionPayloadFragment.newInstance(TYPE_RESPONSE), getString(R.string.netspy_response));
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new SimpleOnPageChangedListener() {
             @Override

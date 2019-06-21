@@ -40,7 +40,7 @@
                 android:id="@+id/toolbar_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Chuck.TextAppearance.TransactionTitle"
+                style="@style/NetSpy.TextAppearance.TransactionTitle"
                 tools:text="Title"/>
 
         </android.support.v7.widget.Toolbar>

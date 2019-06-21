@@ -1,4 +1,3 @@
-
 package com.creditease.netspy.internal.support;
 
 import android.app.NotificationChannel;
@@ -21,7 +20,7 @@ import java.lang.reflect.Method;
 
 public class NotificationHelper {
 
-    private static final String CHANNEL_ID = "chuck";
+    private static final String CHANNEL_ID = "netspy";
     private static final int NOTIFICATION_ID = 1138;
     private static final int BUFFER_SIZE = 10;
 
@@ -56,7 +55,8 @@ public class NotificationHelper {
                             context.getString(R.string.notification_category), NotificationManager.IMPORTANCE_LOW));
             try {
                 setChannelId = NotificationCompat.Builder.class.getMethod("setChannelId", String.class);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
     }
 
@@ -66,12 +66,15 @@ public class NotificationHelper {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setContentIntent(PendingIntent.getActivity(context, 0, NetSpy.getLaunchIntent(context), 0))
                     .setLocalOnly(true)
-                    .setSmallIcon(R.drawable.chuck_ic_notification_white_24dp)
-                    .setColor(ContextCompat.getColor(context, R.color.chuck_colorPrimary))
-                    .setContentTitle(context.getString(R.string.chuck_notification_title));
+                    .setSmallIcon(R.drawable.netspy_ic_notification_white_24dp)
+                    .setColor(ContextCompat.getColor(context, R.color.netspy_colorPrimary))
+                    .setContentTitle(context.getString(R.string.netspy_notification_title));
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             if (setChannelId != null) {
-                try { setChannelId.invoke(builder, CHANNEL_ID); } catch (Exception ignored) {}
+                try {
+                    setChannelId.invoke(builder, CHANNEL_ID);
+                } catch (Exception ignored) {
+                }
             }
             int count = 0;
             for (int i = transactionBuffer.size() - 1; i >= 0; i--) {
@@ -97,11 +100,11 @@ public class NotificationHelper {
 
     @NonNull
     private NotificationCompat.Action getClearAction() {
-        CharSequence clearTitle = context.getString(R.string.chuck_clear);
+        CharSequence clearTitle = context.getString(R.string.netspy_clear);
         Intent deleteIntent = new Intent(context, ClearTransactionsService.class);
         PendingIntent intent = PendingIntent.getService(context, 11, deleteIntent, PendingIntent.FLAG_ONE_SHOT);
-        return new NotificationCompat.Action(R.drawable.chuck_ic_delete_white_24dp,
-            clearTitle, intent);
+        return new NotificationCompat.Action(R.drawable.netspy_ic_delete_white_24dp,
+                clearTitle, intent);
     }
 
     public void dismiss() {

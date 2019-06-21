@@ -32,17 +32,17 @@ class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHol
     TransactionAdapter(Context context, OnListFragmentInteractionListener listener) {
         this.listener = listener;
         this.context = context;
-        colorDefault = ContextCompat.getColor(context, R.color.chuck_status_default);
-        colorRequested = ContextCompat.getColor(context, R.color.chuck_status_requested);
-        colorError = ContextCompat.getColor(context, R.color.chuck_status_error);
-        color500 = ContextCompat.getColor(context, R.color.chuck_status_500);
-        color400 = ContextCompat.getColor(context, R.color.chuck_status_400);
-        color300 = ContextCompat.getColor(context, R.color.chuck_status_300);
+        colorDefault = ContextCompat.getColor(context, R.color.netspy_status_default);
+        colorRequested = ContextCompat.getColor(context, R.color.netspy_status_requested);
+        colorError = ContextCompat.getColor(context, R.color.netspy_status_error);
+        color500 = ContextCompat.getColor(context, R.color.netspy_status_500);
+        color400 = ContextCompat.getColor(context, R.color.netspy_status_400);
+        color300 = ContextCompat.getColor(context, R.color.netspy_status_300);
 
         cursorAdapter = new CursorAdapter(TransactionAdapter.this.context, null, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER) {
             @Override
             public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chuck_list_item_transaction, parent, false);
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.netspy_list_item_transaction, parent, false);
                 ViewHolder holder = new ViewHolder(itemView);
                 itemView.setTag(holder);
                 return itemView;

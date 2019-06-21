@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.creditease.netspy.R;
 import com.creditease.netspy.internal.data.HttpTransaction;
 
+/**
+ * Created by zhxh on 2019/06/12
+ */
 public class TransactionOverviewFragment extends Fragment implements TransactionFragment {
 
     TextView url;
@@ -39,7 +42,7 @@ public class TransactionOverviewFragment extends Fragment implements Transaction
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.chuck_fragment_transaction_overview, container, false);
+        View view = inflater.inflate(R.layout.netspy_fragment_transaction_overview, container, false);
         url = (TextView) view.findViewById(R.id.url);
         method = (TextView) view.findViewById(R.id.method);
         protocol = (TextView) view.findViewById(R.id.protocol);
@@ -74,7 +77,7 @@ public class TransactionOverviewFragment extends Fragment implements Transaction
             protocol.setText(transaction.getProtocol());
             status.setText(transaction.getStatus().toString());
             response.setText(transaction.getResponseSummaryText());
-            ssl.setText((transaction.isSsl() ? R.string.chuck_yes : R.string.chuck_no));
+            ssl.setText((transaction.isSsl() ? R.string.netspy_yes : R.string.netspy_no));
             requestTime.setText(transaction.getRequestDateString());
             responseTime.setText(transaction.getResponseDateString());
             duration.setText(transaction.getDurationString());

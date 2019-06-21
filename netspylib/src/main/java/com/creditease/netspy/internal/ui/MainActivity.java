@@ -9,12 +9,15 @@ import android.support.v7.widget.Toolbar;
 import com.creditease.netspy.R;
 import com.creditease.netspy.internal.data.HttpTransaction;
 
+/**
+ * Created by zhxh on 2019/06/12
+ */
 public class MainActivity extends BaseNetSpyActivity implements TransactionListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chuck_activity_main);
+        setContentView(R.layout.netspy_activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setSubtitle(getApplicationName());
