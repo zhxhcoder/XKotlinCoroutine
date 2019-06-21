@@ -4,15 +4,11 @@ android {
     compileSdkVersion 28
     buildToolsVersion "29.0.0"
 
-
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -21,7 +17,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
@@ -31,9 +26,5 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
-    implementation 'nl.qbusict:cupboard:2.2.0'
     implementation "com.android.support:design:$supportLibVersion"
-
-    implementation 'org.greenrobot:greendao:3.2.2'
-
 }

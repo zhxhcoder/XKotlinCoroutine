@@ -1,0 +1,674 @@
+
+package com.creditease.netspy.cupboard;
+
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.BaseColumns;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import com.creditease.netspy.cupboard.BaseCompartment;
+import com.creditease.netspy.cupboard.Cupboard;
+import com.creditease.netspy.cupboard.CupboardDatabase;
+import com.creditease.netspy.cupboard.QueryResultIterable;
+import com.creditease.netspy.cupboard.annotation.Index;
+import com.creditease.netspy.cupboard.convert.EntityConverter;
+import com.creditease.netspy.cupboard.convert.EntityConverter.Column;
+import com.creditease.netspy.cupboard.convert.EntityConverter.ColumnType;
+import com.creditease.netspy.cupboard.internal.IndexStatement;
+import com.creditease.netspy.cupboard.internal.IndexStatement.Builder;
+
+/**
+ * Operate on a {@link CupboardDatabase}. A {@link com.creditease.netspy.cupboard.DatabaseCompartment} is created from {@link Cupboard#withDatabase(SQLiteDatabase)}
+ * or {@link Cupboard#withDatabase(CupboardDatabase)}
+ * <p/>
+ * <h2>Example</h2>
+ * <pre>
+ * SQLiteDatabase db = ...
+ * // get the book with id 1
+ * Book book = cupboard().withDatabase(db).get(Book.class, 1L);
+ * </pre>
+ */
+@SuppressLint("DefaultLocale")
+public class DatabaseCompartment extends com.creditease.netspy.cupboard.BaseCompartment {
+    private static final String QUERY_BY_ID = BaseColumns._ID + " = ?";
+
+    private final CupboardDatabase mDatabase;
+
+    DatabaseCompartment(Cupboard cupboard, CupboardDatabase database) {
+        super(cupboard);
+        this.mDatabase = database;
+    }
+
+    public DatabaseCompartment(Cupboard cupboard, SQLiteDatabase database) {
+        this(cupboard, new PlatformSQLiteDatabase(database));
+    }
+
+    /**
+     * Create tables for the classes registered with {@link Cupboard#register(Class)}.
+     * This is useful in {@link SQLiteOpenHelper#onCreate(SQLiteDatabase)}
+     */
+    public void createTables() {
+        for (Class<?> entity : mCupboard.getRegisteredEntities()) {
+            EntityConverter<?> converter = mCupboard.getEntityConverter(entity);
+            createNewTable(mDatabase, converter.getTable(), converter.getColumns());
+        }
+    }
+
+    /**
+     * Upgrade and / or create tables for the classes registered with {@link Cupboard#register(Class)}
+     * This is useful in {@link SQLiteOpenHelper#onUpgrade(SQLiteDatabase, int, int)}
+     */
+    public void upgradeTables() {
+        for (Class<?> entity : mCupboard.getRegisteredEntities()) {
+            EntityConverter<?> converter = mCupboard.getEntityConverter(entity);
+            updateTable(mDatabase, converter.getTable(), converter.getColumns());
+        }
+    }
+
+    /**
+     * Drop all tables for the classes registered with {@link Cupboard#register(Class)}
+     */
+    public void dropAllTables() {
+        for (Class<?> entity : mCupboard.getRegisteredEntities()) {
+            EntityConverter<?> converter = mCupboard.getEntityConverter(entity);
+            mDatabase.execSQL("DROP TABLE IF EXISTS " + quoteTable(converter.getTable()));
+        }
+    }
+
+
+    /**
+     * Remove all indices for the classes registered with {@link Cupboard#register(Class)}, including
+     * any indices not added by Cupboard. Typically called before upgrading tables.
+     */
+    public void dropAllIndices() {
+        for (Class<?> entity : mCupboard.getRegisteredEntities()) {
+            dropIndices(entity);
+        }
+    }
+
+    private void dropIndices(Class<?> entity) {
+        String table = mCupboard.getTable(entity);
+        Cursor indices = mDatabase.rawQuery("select name, sql from sqlite_master where type = 'index' and tbl_name = '" + table + '\'', null);
+        try {
+            while (indices.moveToNext()) {
+                String name = indices.getString(0);
+                mDatabase.execSQL("drop index '" + name + "'");
+            }
+        } finally {
+            indices.close();
+        }
+    }
+
+    /**
+     * Get an entity by id
+     *
+     * @param entityClass the entity class
+     * @param id          the id of the entity
+     * @return the entity or null if not found
+     */
+    public <T> T get(Class<T> entityClass, long id) {
+        return query(entityClass).byId(id).get();
+    }
+
+    /**
+     * Get an entity by the id set on an example entity
+     *
+     * @param object the entity
+     * @return the entity, or null if not found
+     * @throws IllegalArgumentException if the entity id is not set
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T get(T object) throws IllegalArgumentException {
+        EntityConverter<T> converter = (EntityConverter<T>) getConverter(object.getClass());
+        Long id = converter.getId(object);
+        if (id != null) {
+            return (T) get(object.getClass(), converter.getId(object));
+        }
+        throw new IllegalArgumentException("id of entity " + object.getClass() + " is not set");
+    }
+
+    /**
+     * Query entities
+     *
+     * @param entityClass the entity to query for
+     * @return a {@link QueryBuilder} for chaining
+     */
+    public <T> QueryBuilder<T> query(Class<T> entityClass) {
+        return new QueryBuilder<T>(entityClass, this);
+    }
+
+    /**
+     * Put multiple entities in a single transaction.
+     *
+     * @param entities the entities
+     */
+    public void put(Object... entities) {
+        boolean mNestedTransaction = mDatabase.inTransaction();
+        mDatabase.beginTransaction();
+        try {
+            for (Object entity : entities) {
+                put(entity);
+                if (!mNestedTransaction) {
+                    mDatabase.yieldIfContendedSafely();
+                }
+            }
+            mDatabase.setTransactionSuccessful();
+        } finally {
+            mDatabase.endTransaction();
+        }
+    }
+
+    /**
+     * Put multiple entities in a single transaction.
+     *
+     * @param entities the entities
+     */
+    public void put(Collection<?> entities) {
+        boolean mNestedTransaction = mDatabase.inTransaction();
+        mDatabase.beginTransaction();
+        try {
+            for (Object entity : entities) {
+                put(entity);
+                if (!mNestedTransaction) {
+                    mDatabase.yieldIfContendedSafely();
+                }
+            }
+            mDatabase.setTransactionSuccessful();
+        } finally {
+            mDatabase.endTransaction();
+        }
+    }
+
+    /**
+     * Put a single entity. If an entity of this type with this id already exists it will be replaced.
+     *
+     * @param entity the entity
+     * @return the entity id (also set on the passed in entity)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> long put(T entity) {
+        EntityConverter<T> converter = (EntityConverter<T>) getConverter(entity.getClass());
+        ContentValues values = new ContentValues();
+        converter.toValues(entity, values);
+        Long id = values.getAsLong(BaseColumns._ID);
+        long insertedId = put(entity.getClass(), values);
+        if (id == null) {
+            converter.setId(insertedId, entity);
+        }
+        return id == null ? insertedId : id;
+    }
+
+    /**
+     * Put an entity from a {@link ContentValues} object.
+     * If the content values contain a {@link BaseColumns#_ID} then this id will be used and an existing entity will be replaced.
+     *
+     * @param entityClass the entity class
+     * @param values      the content values
+     * @return the id of the entity
+     */
+    public long put(Class<?> entityClass, ContentValues values) {
+        EntityConverter<?> converter = getConverter(entityClass);
+        Long id = values.getAsLong(BaseColumns._ID);
+        if (id != null) {
+            mDatabase.replaceOrThrow(quoteTable(converter.getTable()), "_id", values);
+            return id;
+        } else {
+            id = mDatabase.insertOrThrow(quoteTable(converter.getTable()), "_id", values);
+            return id;
+        }
+    }
+
+    /**
+     * Update entities
+     *
+     * @param entityClass the entity class
+     * @param values      the content values. If it contains a {@link BaseColumns#_ID} then only the entity with the given id will be updated (if any)
+     * @return the number of entities updated
+     */
+    public int update(Class<?> entityClass, ContentValues values) {
+        EntityConverter<?> converter = getConverter(entityClass);
+        if (values.containsKey(BaseColumns._ID)) {
+            return mDatabase.update(quoteTable(converter.getTable()), values, QUERY_BY_ID, new String[]{values.getAsString(BaseColumns._ID)});
+        } else {
+            return mDatabase.update(quoteTable(converter.getTable()), values, null, null);
+        }
+    }
+
+    /**
+     * Update entities
+     *
+     * @param entityClass   entity class
+     * @param values        content values
+     * @param selection     where clause
+     * @param selectionArgs selection arguments
+     * @return the number of entities updated
+     */
+    public int update(Class<?> entityClass, ContentValues values, String selection, String... selectionArgs) {
+        EntityConverter<?> converter = getConverter(entityClass);
+        return mDatabase.update(quoteTable(converter.getTable()), values, selection, selectionArgs);
+    }
+
+    /**
+     * Delete an entity
+     *
+     * @param entity the entity to delete.
+     * @return true if the entity was deleted, false if no entity with the given id was found.
+     */
+    public <T> boolean delete(T entity) {
+        @SuppressWarnings("unchecked")
+        Class<T> clz = (Class<T>) entity.getClass();
+        EntityConverter<T> converter = getConverter(clz);
+        Long id = converter.getId(entity);
+        if (id != null) {
+            return delete(clz, QUERY_BY_ID, String.valueOf(id)) > 0;
+        }
+        return false;
+    }
+
+    /**
+     * Delete an entity by id
+     *
+     * @param entityClass the entity class
+     * @param id          the entity id
+     * @return true if the entity was deleted, false if no entity with the given id was found
+     */
+    public boolean delete(Class<?> entityClass, long id) {
+        EntityConverter<?> converter = getConverter(entityClass);
+        return mDatabase.delete(quoteTable(converter.getTable()), QUERY_BY_ID, new String[]{String.valueOf(id)}) > 0;
+    }
+
+    /**
+     * Delete entities
+     *
+     * @param entityClass   the entity class
+     * @param selection     where clause
+     * @param selectionArgs selection arguments
+     * @return the number of deleted entities
+     */
+    public int delete(Class<?> entityClass, String selection, String... selectionArgs) {
+        EntityConverter<?> converter = getConverter(entityClass);
+        return mDatabase.delete(quoteTable(converter.getTable()), selection, selectionArgs);
+    }
+
+    boolean updateTable(CupboardDatabase db, String table, List<Column> cols) {
+        Cursor cursor = db.rawQuery("pragma table_info('" + table + "')", null);
+        try {
+            if (cursor.getCount() == 0) {
+                return createNewTable(db, table, cols);
+            } else {
+                return updateTable(db, table, cursor, cols);
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    boolean updateTable(CupboardDatabase db, String table, Cursor tableInfo, List<Column> cols) {
+        Locale locale = Locale.US;
+        Map<String, Column> columns = new HashMap<String, Column>(cols.size());
+        for (Column col : cols) {
+            if (col.type == ColumnType.JOIN) {
+                continue;
+            }
+            columns.put(col.name.toLowerCase(locale), col);
+        }
+
+        int index = tableInfo.getColumnIndex("name");
+        while (tableInfo.moveToNext()) {
+            columns.remove(tableInfo.getString(index).toLowerCase(locale));
+        }
+
+        boolean updated = false;
+        if (!columns.isEmpty()) {
+            updated = true;
+            for (Column column : columns.values()) {
+                db.execSQL("alter table '" + table + "' add column '" + column.name + "' " + column.type.toString());
+            }
+        }
+        updated |= diffAndUpdateIndexes(db, table, cols);
+        return updated;
+    }
+
+    private boolean diffAndUpdateIndexes(CupboardDatabase db, String table, List<Column> cols) {
+        boolean updated = false;
+        Cursor indexesInDbCursor = db.rawQuery("select name, sql from sqlite_master where type = 'index' and tbl_name = '" + table + "' and name like '" + IndexStatement.INDEX_PREFIX + "%'", null);
+        Map<String, String> indexesInDb = new HashMap<String, String>();
+        while (indexesInDbCursor.moveToNext()) {
+            indexesInDb.put(indexesInDbCursor.getString(0), indexesInDbCursor.getString(1));
+        }
+        indexesInDbCursor.close();
+
+        Builder builder = new Builder();
+        for (Column col : cols) {
+            if (col.type == ColumnType.JOIN) {
+                continue;
+            }
+            Index index = col.index;
+            if (index != null) {
+                builder.addIndexedColumn(table, col.name, index);
+            }
+        }
+        Map<String, IndexStatement> indexesOfEntity = builder.buildAsMap();
+
+        Set<String> oldSet = indexesInDb.keySet();
+        Set<String> newSet = indexesOfEntity.keySet();
+
+        Set<String> toRemove = new HashSet<String>(oldSet);
+        toRemove.removeAll(newSet);
+        for (String name : toRemove) {
+            db.execSQL("drop index if exists " + name);
+            updated |= true;
+        }
+
+        Set<String> toAdd = new HashSet<String>(newSet);
+        toAdd.removeAll(oldSet);
+        for (String name : toAdd) {
+            db.execSQL(indexesOfEntity.get(name).getCreationSql(table));
+            updated |= true;
+        }
+
+        Set<String> toPossiblyKeep = new HashSet<String>(newSet);
+        toPossiblyKeep.retainAll(oldSet);
+        for (String name : toPossiblyKeep) {
+            String oldSql = indexesInDb.get(name);
+            String newSql = indexesOfEntity.get(name).getCreationSql(table, false);
+            // If they are the same, leave it that way, otherwise, drop old and create new
+            if (!oldSql.equalsIgnoreCase(newSql)) {
+                db.execSQL("drop index if exists " + name);
+                db.execSQL(newSql);
+                updated |= true;
+            }
+        }
+
+        return updated;
+    }
+
+    boolean createNewTable(CupboardDatabase db, String table, List<Column> cols) {
+        StringBuilder sql = new StringBuilder("create table '").append(table).append("' (_id integer primary key autoincrement");
+
+        Builder builder = new Builder();
+        for (Column col : cols) {
+            if (col.type == ColumnType.JOIN) {
+                continue;
+            }
+            String name = col.name;
+            if (!name.equals(BaseColumns._ID)) {
+                sql.append(", '").append(name).append("'");
+                sql.append(" ").append(col.type.toString());
+            }
+            Index index = col.index;
+            if (index != null) {
+                builder.addIndexedColumn(table, name, index);
+            }
+        }
+        sql.append(");");
+        db.execSQL(sql.toString());
+
+        for (IndexStatement stmt : builder.build()) {
+            db.execSQL(stmt.getCreationSql(table));
+        }
+        return true;
+    }
+
+    private <T> QueryResultIterable<T> query(Class<T> entityClass, String[] projection, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit, boolean distinct) {
+        EntityConverter<T> translator = getConverter(entityClass);
+        Cursor cursor = mDatabase.query(distinct, quoteTable(translator.getTable()), projection, selection, selectionArgs, groupBy, having, orderBy, limit);
+        return new QueryResultIterable<T>(cursor, translator);
+    }
+
+    private String quoteTable(String table) {
+        return "'" + table + "'";
+    }
+
+    public static class QueryBuilder<T> {
+        private final Class<T> mEntityClass;
+        private final com.creditease.netspy.cupboard.DatabaseCompartment mCompartment;
+        private String mSelection;
+        private String[] mSelectionArgs;
+        private String mOrder;
+        private String mGroup;
+        private String mHaving;
+        private String[] mProjection;
+        private String mLimit = null;
+        private String mOffset = null;
+        private boolean mDistinct = false;
+
+        QueryBuilder(Class<T> entityClass, com.creditease.netspy.cupboard.DatabaseCompartment compartment) {
+            this.mEntityClass = entityClass;
+            this.mCompartment = compartment;
+        }
+
+        /**
+         * Set the selection (where clause) and selection arguments. You can (and should) use a ? as a parameter placeholder for query
+         * parameters. Each place holder will be replaced by an argument you pass in, in the specified order.
+         *
+         * @param selection The selection, optionally containing ? as parameter placeholders
+         * @param args      The arguments matching the number of placeholders in the selection string.
+         * @return this builder
+         */
+        public QueryBuilder<T> withSelection(String selection, String... args) {
+            this.mSelection = selection;
+            this.mSelectionArgs = args;
+            return this;
+        }
+
+        /**
+         * Set the order by clause. This is a SQL styled list of fields, optionally with "asc" or "desc" appended for specifying the order.
+         * For example, to sort by the entity "name" field, in descending order pass the value <pre>name desc</pre>
+         *
+         * @param order the required order
+         * @return this builder
+         */
+        public QueryBuilder<T> orderBy(String order) {
+            this.mOrder = order;
+            return this;
+        }
+
+        /**
+         * Set the group by clause
+         *
+         * @param group the group by clause
+         * @return this builder
+         */
+        public QueryBuilder<T> groupBy(String group) {
+            this.mGroup = group;
+            return this;
+        }
+
+        /**
+         * Set the having clause
+         *
+         * @param having the having clause
+         * @return this builder
+         */
+        public QueryBuilder<T> having(String having) {
+            this.mHaving = having;
+            return this;
+        }
+
+        /**
+         * Set a projection, the columns returned, for this query. Setting a projection can be more performant, but will result in "incomplete"
+         * objects.
+         *
+         * @param projection the columns (entity fields) to return
+         * @return this builder
+         */
+        public QueryBuilder<T> withProjection(String... projection) {
+            this.mProjection = projection;
+            return this;
+        }
+
+        /**
+         * Perform a query by id. This will also limit the number of results to 1 so that a query by id will return either zero or one results.
+         *
+         * @param id the id to query for
+         * @return this builder
+         */
+        public QueryBuilder<T> byId(long id) {
+            mSelection = "_id = ?";
+            mSelectionArgs = new String[]{String.valueOf(id)};
+            limit(1);
+            return this;
+        }
+
+        /**
+         * Set a limit on the number of rows returned. Must be greater or equal to 1.
+         *
+         * @param limit the maximum rows to return when the query is executed
+         * @return the builder
+         */
+        public QueryBuilder<T> limit(int limit) {
+            if (limit < 1) {
+                throw new IllegalArgumentException("Limit must be greater or equal to 1");
+            }
+            mLimit = String.valueOf(limit);
+            return this;
+        }
+
+        /**
+         * Set an offset of rows returned. Must be greater or equal to 1.
+         * In case there is offset but no limit defined, {@link Long#MAX_VALUE} will be used as limit.
+         *
+         * @param offset the offset of rows to return when the query is executed
+         * @return the builder
+         */
+        public QueryBuilder<T> offset(int offset) {
+            if (offset < 1) {
+                throw new IllegalArgumentException("Offset must be greater or equal to 1");
+            }
+            mOffset = String.valueOf(offset);
+            return this;
+        }
+
+        /**
+         * Make this query distinct e.g. removing duplicate rows. This will most likely require that you pass in a projection as well.
+         *
+         * @return this builder.
+         */
+        public QueryBuilder<T> distinct() {
+            mDistinct = true;
+            return this;
+        }
+
+        /**
+         * Execute the query
+         *
+         * @return The query result
+         */
+        public QueryResultIterable<T> query() {
+            if (mLimit != null && mOffset != null) {
+                mLimit = String.format("%s,%s", mOffset, mLimit);
+            } else if (mOffset != null) {
+                mLimit = String.format("%s,%d", mOffset, Long.MAX_VALUE);
+            }
+            return mCompartment.query(mEntityClass, mProjection, mSelection, mSelectionArgs, mGroup, mHaving, mOrder, mLimit, mDistinct);
+        }
+
+        /**
+         * Convenience for calling {@link #query()}.getCursor()
+         *
+         * @return the cursor
+         */
+        public Cursor getCursor() {
+            return query().getCursor();
+        }
+
+        /**
+         * Convenience for calling {@link #query()}.get()
+         *
+         * @return the entity or null if the query didn't return any results
+         */
+        public T get() {
+            return query().get();
+        }
+
+        /**
+         * Convenience for calling {@link #query()}.list()
+         *
+         * @return the result set as a list.
+         */
+        public List<T> list() {
+            return query().list();
+        }
+    }
+
+    private static class PlatformSQLiteDatabase implements CupboardDatabase {
+        private final SQLiteDatabase mDatabase;
+
+        public PlatformSQLiteDatabase(SQLiteDatabase db) {
+            mDatabase = db;
+        }
+
+        @Override
+        public long insertOrThrow(String table, String nullColumnHack, ContentValues values) {
+            return mDatabase.insertOrThrow(table, nullColumnHack, values);
+        }
+
+        @Override
+        public long replaceOrThrow(String table, String nullColumnHack, ContentValues values) {
+            return mDatabase.replaceOrThrow(table, nullColumnHack, values);
+        }
+
+        @Override
+        public int update(String table, ContentValues values, String selection, String[] selectionArgs) {
+            return mDatabase.update(table, values, selection, selectionArgs);
+        }
+
+        @Override
+        public Cursor query(boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
+            return mDatabase.query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+        }
+
+        @Override
+        public Cursor rawQuery(String sql, String[] selectionArgs) {
+            return mDatabase.rawQuery(sql, selectionArgs);
+        }
+
+        @Override
+        public int delete(String table, String selection, String[] selectionArgs) {
+            return mDatabase.delete(table, selection, selectionArgs);
+        }
+
+        @Override
+        public boolean inTransaction() {
+            return mDatabase.inTransaction();
+        }
+
+        @Override
+        public void beginTransaction() {
+            mDatabase.beginTransaction();
+        }
+
+        @Override
+        public void yieldIfContendedSafely() {
+            mDatabase.yieldIfContendedSafely();
+        }
+
+        @Override
+        public void setTransactionSuccessful() {
+            mDatabase.setTransactionSuccessful();
+        }
+
+        @Override
+        public void endTransaction() {
+            mDatabase.endTransaction();
+        }
+
+        @Override
+        public void execSQL(String sql) {
+            mDatabase.execSQL(sql);
+        }
+    }
+
+}

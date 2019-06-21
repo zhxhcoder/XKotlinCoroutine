@@ -1,7 +1,7 @@
 package com.creditease.netspy.internal.data;
 
-import nl.qbusict.cupboard.Cupboard;
-import nl.qbusict.cupboard.CupboardBuilder;
+import com.creditease.netspy.cupboard.Cupboard;
+import com.creditease.netspy.cupboard.CupboardBuilder;
 
 public class LocalCupboard {
 
