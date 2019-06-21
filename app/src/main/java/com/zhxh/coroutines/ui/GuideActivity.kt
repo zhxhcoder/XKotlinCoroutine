@@ -4,7 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.zhxh.coroutines.R
-import com.zhxh.coroutines.ui.chuck.MainChuckActivity
+import com.zhxh.coroutines.ui.chuck.MainNetSpyActivity
 import kotlinx.android.synthetic.main.activity_guide.*
 
 class GuideActivity : AppCompatActivity() {
@@ -21,7 +21,7 @@ class GuideActivity : AppCompatActivity() {
             startActivity(Intent(this@GuideActivity, KotlinCoroutineActivity::class.java))
         }
         btn_chuck.setOnClickListener {
-            startActivity(Intent(this@GuideActivity, MainChuckActivity::class.java))
+            startActivity(Intent(this@GuideActivity, MainNetSpyActivity::class.java))
         }
     }
 }
