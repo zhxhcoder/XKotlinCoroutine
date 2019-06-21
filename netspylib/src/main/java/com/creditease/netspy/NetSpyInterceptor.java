@@ -97,7 +97,7 @@ public final class NetSpyInterceptor implements Interceptor {
         this.maxContentLength = max;
         return this;
     }
-  
+
     /**
      * Set the retention period for HTTP transaction data captured by this interceptor.
      * The default is one week.
@@ -110,7 +110,8 @@ public final class NetSpyInterceptor implements Interceptor {
         return this;
     }
 
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override
+    public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
         RequestBody requestBody = request.body();
@@ -252,8 +253,8 @@ public final class NetSpyInterceptor implements Interceptor {
     private boolean bodyHasUnsupportedEncoding(Headers headers) {
         String contentEncoding = headers.get("Content-Encoding");
         return contentEncoding != null &&
-                !contentEncoding.equalsIgnoreCase("identity") &&
-                !contentEncoding.equalsIgnoreCase("gzip");
+            !contentEncoding.equalsIgnoreCase("identity") &&
+            !contentEncoding.equalsIgnoreCase("gzip");
     }
 
     private boolean bodyGzipped(Headers headers) {
