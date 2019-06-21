@@ -1,4 +1,3 @@
-
 package com.creditease.netspy.internal.support;
 
 import android.support.v4.view.ViewPager;

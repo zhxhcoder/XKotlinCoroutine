@@ -1,4 +1,3 @@
-
 package com.creditease.netspy.internal.data;
 
 import nl.qbusict.cupboard.Cupboard;
