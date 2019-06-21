@@ -1,7 +1,7 @@
 package com.zhxh.coroutines.model
 
+import com.creditease.netspy.ChuckInterceptor
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.readystatesoftware.chuck.ChuckInterceptor
 import com.zhxh.coroutines.base.BaseApplication
 import com.zhxh.coroutines.net.BaseNetService
 import okhttp3.Interceptor
