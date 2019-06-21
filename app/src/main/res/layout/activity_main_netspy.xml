@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:text="do_http_activity" />
+        android:text="do_http_activity"
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/launch_netspy_directly"
@@ -24,5 +25,6 @@
         android:layout_below="@+id/do_http"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:text="launch_netspy_directly" />
+        android:text="launch_netspy_directly"
+        android:textAllCaps="false" />
 </RelativeLayout>
