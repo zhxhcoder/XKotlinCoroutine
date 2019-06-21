@@ -73,11 +73,11 @@ public class TransactionPayloadFragment extends Fragment implements TransactionF
             switch (type) {
                 case TYPE_REQUEST:
                     setText(transaction.getRequestHeadersString(true),
-                            transaction.getFormattedRequestBody(), transaction.requestBodyIsPlainText());
+                        transaction.getFormattedRequestBody(), transaction.requestBodyIsPlainText());
                     break;
                 case TYPE_RESPONSE:
                     setText(transaction.getResponseHeadersString(true),
-                            transaction.getFormattedResponseBody(), transaction.responseBodyIsPlainText());
+                        transaction.getFormattedResponseBody(), transaction.responseBodyIsPlainText());
                     break;
             }
         }

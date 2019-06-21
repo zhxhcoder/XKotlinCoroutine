@@ -27,13 +27,14 @@ import com.creditease.netspy.internal.support.NotificationHelper;
 import com.creditease.netspy.internal.support.SQLiteUtils;
 
 public class TransactionListFragment extends Fragment implements
-        SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
+    SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private String currentFilter;
     private OnListFragmentInteractionListener listener;
     private TransactionAdapter adapter;
 
-    public TransactionListFragment() {}
+    public TransactionListFragment() {
+    }
 
     public static TransactionListFragment newInstance() {
         return new TransactionListFragment();
@@ -54,7 +55,7 @@ public class TransactionListFragment extends Fragment implements
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                    DividerItemDecoration.VERTICAL));
+                DividerItemDecoration.VERTICAL));
             adapter = new TransactionAdapter(getContext(), listener);
             recyclerView.setAdapter(adapter);
         }
@@ -74,7 +75,7 @@ public class TransactionListFragment extends Fragment implements
             listener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -115,10 +116,10 @@ public class TransactionListFragment extends Fragment implements
         if (!TextUtils.isEmpty(currentFilter)) {
             if (TextUtils.isDigitsOnly(currentFilter)) {
                 loader.setSelection("responseCode LIKE ?");
-                loader.setSelectionArgs(new String[]{ currentFilter + "%" });
+                loader.setSelectionArgs(new String[]{currentFilter + "%"});
             } else {
                 loader.setSelection("path LIKE ?");
-                loader.setSelectionArgs(new String[]{ "%" + currentFilter + "%" });
+                loader.setSelectionArgs(new String[]{"%" + currentFilter + "%"});
             }
         }
         loader.setProjection(HttpTransaction.PARTIAL_PROJECTION);
