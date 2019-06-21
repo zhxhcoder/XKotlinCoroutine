@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.creditease.netspy.R;
-import com.creditease.netspy.internal.data.ChuckContentProvider;
+import com.creditease.netspy.internal.data.NetSpyContentProvider;
 import com.creditease.netspy.internal.data.HttpTransaction;
 import com.creditease.netspy.internal.support.NotificationHelper;
 import com.creditease.netspy.internal.support.SQLiteUtils;
@@ -97,7 +97,7 @@ public class TransactionListFragment extends Fragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.clear) {
-            getContext().getContentResolver().delete(ChuckContentProvider.TRANSACTION_URI, null, null);
+            getContext().getContentResolver().delete(NetSpyContentProvider.TRANSACTION_URI, null, null);
             NotificationHelper.clearBuffer();
             return true;
         } else if (item.getItemId() == R.id.browse_sql) {
@@ -111,7 +111,7 @@ public class TransactionListFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getContext());
-        loader.setUri(ChuckContentProvider.TRANSACTION_URI);
+        loader.setUri(NetSpyContentProvider.TRANSACTION_URI);
         if (!TextUtils.isEmpty(currentFilter)) {
             if (TextUtils.isDigitsOnly(currentFilter)) {
                 loader.setSelection("responseCode LIKE ?");

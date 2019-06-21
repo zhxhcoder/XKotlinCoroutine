@@ -1,6 +1,6 @@
 package com.zhxh.coroutines.model
 
-import com.creditease.netspy.ChuckInterceptor
+import com.creditease.netspy.NetSpyInterceptor
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.zhxh.coroutines.base.BaseApplication
 import com.zhxh.coroutines.net.BaseNetService
@@ -15,7 +15,7 @@ class KotlinNetService : BaseNetService() {
     }
 
     override fun getInterceptorList(): List<Interceptor> {
-        return listOf(ChuckInterceptor(BaseApplication.instance), StethoInterceptor())
+        return listOf(NetSpyInterceptor(BaseApplication.instance), StethoInterceptor())
     }
 
     override val baseUrl: String

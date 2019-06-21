@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import com.creditease.netspy.R;
 import com.creditease.netspy.internal.data.HttpTransaction;
 
-public class MainActivity extends BaseChuckActivity implements TransactionListFragment.OnListFragmentInteractionListener {
+public class MainActivity extends BaseNetSpyActivity implements TransactionListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

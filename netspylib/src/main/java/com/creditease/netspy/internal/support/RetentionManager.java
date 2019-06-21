@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.creditease.netspy.ChuckInterceptor;
-import com.creditease.netspy.internal.data.ChuckContentProvider;
+import com.creditease.netspy.NetSpyInterceptor;
+import com.creditease.netspy.internal.data.NetSpyContentProvider;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class RetentionManager {
 
-    private static final String LOG_TAG = "Chuck";
+    private static final String LOG_TAG = "NetSpy";
     private static final String PREFS_NAME = "chuck_preferences";
     private static final String KEY_LAST_CLEANUP = "last_cleanup";
 
@@ -23,11 +23,11 @@ public class RetentionManager {
     private final long cleanupFrequency;
     private final SharedPreferences prefs;
 
-    public RetentionManager(Context context, ChuckInterceptor.Period retentionPeriod) {
+    public RetentionManager(Context context, NetSpyInterceptor.Period retentionPeriod) {
         this.context = context;
         period = toMillis(retentionPeriod);
         prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        cleanupFrequency = (retentionPeriod == ChuckInterceptor.Period.ONE_HOUR) ?
+        cleanupFrequency = (retentionPeriod == NetSpyInterceptor.Period.ONE_HOUR) ?
                 TimeUnit.MINUTES.toMillis(30) : TimeUnit.HOURS.toMillis(2);
     }
 
@@ -55,7 +55,7 @@ public class RetentionManager {
     }
 
     private void deleteSince(long threshold) {
-        int rows = context.getContentResolver().delete(ChuckContentProvider.TRANSACTION_URI,
+        int rows = context.getContentResolver().delete(NetSpyContentProvider.TRANSACTION_URI,
                 "requestDate <= ?", new String[] { String.valueOf(threshold) });
         Log.i(LOG_TAG, rows + " transactions deleted");
     }
@@ -68,7 +68,7 @@ public class RetentionManager {
         return (period == 0) ? now : now - period;
     }
 
-    private long toMillis(ChuckInterceptor.Period period) {
+    private long toMillis(NetSpyInterceptor.Period period) {
         switch (period) {
             case ONE_HOUR:
                 return TimeUnit.HOURS.toMillis(1);

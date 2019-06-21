@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.creditease.netspy.Chuck;
-import com.creditease.netspy.ChuckInterceptor;
+import com.creditease.netspy.NetSpy;
+import com.creditease.netspy.NetSpyInterceptor;
 
 import com.zhxh.coroutines.R;
 import okhttp3.OkHttpClient;
@@ -38,15 +38,15 @@ public class MainNetSpyActivity extends AppCompatActivity {
 
     private OkHttpClient getClient(Context context) {
         return new OkHttpClient.Builder()
-                // Add a ChuckInterceptor instance to your OkHttp client
-                .addInterceptor(new ChuckInterceptor(context))
+                // Add a NetSpyInterceptor instance to your OkHttp client
+                .addInterceptor(new NetSpyInterceptor(context))
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
     }
 
     private void launchChuckDirectly() {
-        // Optionally launch Chuck directly from your own app UI
-        startActivity(Chuck.getLaunchIntent(this));
+        // Optionally launch NetSpy directly from your own app UI
+        startActivity(NetSpy.getLaunchIntent(this));
     }
 
     private void doHttpActivity() {

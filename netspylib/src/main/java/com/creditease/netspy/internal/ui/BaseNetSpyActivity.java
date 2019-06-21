@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.creditease.netspy.internal.support.NotificationHelper;
 
-public abstract class BaseChuckActivity extends AppCompatActivity {
+public abstract class BaseNetSpyActivity extends AppCompatActivity {
 
     private static boolean inForeground;
 

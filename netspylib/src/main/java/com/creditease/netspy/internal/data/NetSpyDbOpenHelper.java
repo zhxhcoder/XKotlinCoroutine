@@ -5,12 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-class ChuckDbOpenHelper extends SQLiteOpenHelper {
+class NetSpyDbOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "chuck.db";
     private static final int VERSION = 3;
 
-    ChuckDbOpenHelper(Context context) {
+    NetSpyDbOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
 

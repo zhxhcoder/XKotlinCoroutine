@@ -12,10 +12,10 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.LongSparseArray;
 
-import com.creditease.netspy.Chuck;
+import com.creditease.netspy.NetSpy;
 import com.creditease.netspy.R;
 import com.creditease.netspy.internal.data.HttpTransaction;
-import com.creditease.netspy.internal.ui.BaseChuckActivity;
+import com.creditease.netspy.internal.ui.BaseNetSpyActivity;
 
 import java.lang.reflect.Method;
 
@@ -62,9 +62,9 @@ public class NotificationHelper {
 
     public synchronized void show(HttpTransaction transaction) {
         addToBuffer(transaction);
-        if (!BaseChuckActivity.isInForeground()) {
+        if (!BaseNetSpyActivity.isInForeground()) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setContentIntent(PendingIntent.getActivity(context, 0, Chuck.getLaunchIntent(context), 0))
+                    .setContentIntent(PendingIntent.getActivity(context, 0, NetSpy.getLaunchIntent(context), 0))
                     .setLocalOnly(true)
                     .setSmallIcon(R.drawable.chuck_ic_notification_white_24dp)
                     .setColor(ContextCompat.getColor(context, R.color.chuck_colorPrimary))

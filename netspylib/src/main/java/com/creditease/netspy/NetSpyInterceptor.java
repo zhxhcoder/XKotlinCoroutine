@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import com.creditease.netspy.internal.data.ChuckContentProvider;
+import com.creditease.netspy.internal.data.NetSpyContentProvider;
 import com.creditease.netspy.internal.data.HttpTransaction;
 import com.creditease.netspy.internal.data.LocalCupboard;
 import com.creditease.netspy.internal.support.NotificationHelper;
@@ -34,7 +34,7 @@ import okio.Okio;
 /**
  * An OkHttp Interceptor which persists and displays HTTP activity in your application for later inspection.
  */
-public final class ChuckInterceptor implements Interceptor {
+public final class NetSpyInterceptor implements Interceptor {
 
     public enum Period {
         /**
@@ -55,7 +55,7 @@ public final class ChuckInterceptor implements Interceptor {
         FOREVER
     }
 
-    private static final String LOG_TAG = "ChuckInterceptor";
+    private static final String LOG_TAG = "NetSpyInterceptor";
     private static final Period DEFAULT_RETENTION = Period.ONE_WEEK;
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
@@ -68,7 +68,7 @@ public final class ChuckInterceptor implements Interceptor {
     /**
      * @param context The current Context.
      */
-    public ChuckInterceptor(Context context) {
+    public NetSpyInterceptor(Context context) {
         this.context = context.getApplicationContext();
         notificationHelper = new NotificationHelper(this.context);
         showNotification = true;
@@ -79,9 +79,9 @@ public final class ChuckInterceptor implements Interceptor {
      * Control whether a notification is shown while HTTP activity is recorded.
      *
      * @param show true to show a notification, false to suppress it.
-     * @return The {@link ChuckInterceptor} instance.
+     * @return The {@link NetSpyInterceptor} instance.
      */
-    public ChuckInterceptor showNotification(boolean show) {
+    public NetSpyInterceptor showNotification(boolean show) {
         showNotification = show;
         return this;
     }
@@ -91,9 +91,9 @@ public final class ChuckInterceptor implements Interceptor {
      * Warning: setting this value too high may cause unexpected results.
      *
      * @param max the maximum length (in bytes) for request/response content.
-     * @return The {@link ChuckInterceptor} instance.
+     * @return The {@link NetSpyInterceptor} instance.
      */
-    public ChuckInterceptor maxContentLength(long max) {
+    public NetSpyInterceptor maxContentLength(long max) {
         this.maxContentLength = max;
         return this;
     }
@@ -103,9 +103,9 @@ public final class ChuckInterceptor implements Interceptor {
      * The default is one week.
      *
      * @param period the peroid for which to retain HTTP transaction data.
-     * @return The {@link ChuckInterceptor} instance.
+     * @return The {@link NetSpyInterceptor} instance.
      */
-    public ChuckInterceptor retainDataFor(Period period) {
+    public NetSpyInterceptor retainDataFor(Period period) {
         retentionManager = new RetentionManager(context, period);
         return this;
     }
@@ -207,7 +207,7 @@ public final class ChuckInterceptor implements Interceptor {
 
     private Uri create(HttpTransaction transaction) {
         ContentValues values = LocalCupboard.getInstance().withEntity(HttpTransaction.class).toContentValues(transaction);
-        Uri uri = context.getContentResolver().insert(ChuckContentProvider.TRANSACTION_URI, values);
+        Uri uri = context.getContentResolver().insert(NetSpyContentProvider.TRANSACTION_URI, values);
         transaction.setId(Long.valueOf(uri.getLastPathSegment()));
         if (showNotification) {
             notificationHelper.show(transaction);

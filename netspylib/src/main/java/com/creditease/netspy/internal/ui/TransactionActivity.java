@@ -23,7 +23,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.creditease.netspy.R;
-import com.creditease.netspy.internal.data.ChuckContentProvider;
+import com.creditease.netspy.internal.data.NetSpyContentProvider;
 import com.creditease.netspy.internal.data.HttpTransaction;
 import com.creditease.netspy.internal.data.LocalCupboard;
 import com.creditease.netspy.internal.support.FormatUtils;
@@ -35,7 +35,7 @@ import java.util.List;
 import static com.creditease.netspy.internal.ui.TransactionPayloadFragment.TYPE_REQUEST;
 import static com.creditease.netspy.internal.ui.TransactionPayloadFragment.TYPE_RESPONSE;
 
-public class TransactionActivity extends BaseChuckActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class TransactionActivity extends BaseNetSpyActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ARG_TRANSACTION_ID = "transaction_id";
 
@@ -106,7 +106,7 @@ public class TransactionActivity extends BaseChuckActivity implements LoaderMana
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(this);
-        loader.setUri(ContentUris.withAppendedId(ChuckContentProvider.TRANSACTION_URI, transactionId));
+        loader.setUri(ContentUris.withAppendedId(NetSpyContentProvider.TRANSACTION_URI, transactionId));
         return loader;
     }
 

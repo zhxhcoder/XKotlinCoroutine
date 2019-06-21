@@ -13,7 +13,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-public class ChuckContentProvider extends ContentProvider {
+public class NetSpyContentProvider extends ContentProvider {
 
     public static Uri TRANSACTION_URI;
 
@@ -21,7 +21,7 @@ public class ChuckContentProvider extends ContentProvider {
     private static final int TRANSACTIONS = 1;
     private static final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private ChuckDbOpenHelper databaseHelper;
+    private NetSpyDbOpenHelper databaseHelper;
 
     @Override
     public void attachInfo(Context context, ProviderInfo info) {
@@ -33,7 +33,7 @@ public class ChuckContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        databaseHelper = new ChuckDbOpenHelper(getContext());
+        databaseHelper = new NetSpyDbOpenHelper(getContext());
         return true;
     }
 

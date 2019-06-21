@@ -2,7 +2,7 @@
           package="com.creditease.netspy">
     <application>
         <provider
-                android:name=".internal.data.ChuckContentProvider"
+                android:name=".internal.data.NetSpyContentProvider"
                 android:authorities="${applicationId}.chuck.provider"
                 android:exported="false"/>
         <activity
