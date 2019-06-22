@@ -11,13 +11,11 @@ import com.creditease.netspy.internal.ui.NetSpyHomeActivity;
  */
 public class NetSpy {
 
-    /**
-     * Get an Intent to launch the NetSpy UI directly.
-     *
-     * @param context A Context.
-     * @return An Intent for the main NetSpy Activity that can be started with {@link Context#startActivity(Intent)}.
-     */
-    public static Intent getLaunchIntent(Context context) {
-        return new Intent(context, NetSpyHomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    public static Intent getLaunchIntent(Context context, boolean isSpy) {
+        if (isSpy) {
+            return new Intent(context, NetSpyHomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            return new Intent();
+        }
     }
 }

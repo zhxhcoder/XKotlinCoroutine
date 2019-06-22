@@ -47,7 +47,7 @@ public class MainNetSpyActivity extends AppCompatActivity {
 
     private void launchNetSpyDirectly() {
         // Optionally launch NetSpy directly from your own app UI
-        startActivity(NetSpy.getLaunchIntent(this));
+        startActivity(NetSpy.getLaunchIntent(this,true));
     }
 
     private void doHttpActivity() {
