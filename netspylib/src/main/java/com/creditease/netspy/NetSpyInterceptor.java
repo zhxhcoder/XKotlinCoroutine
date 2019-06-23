@@ -32,6 +32,7 @@ import okio.GzipSource;
 import okio.Okio;
 
 /**
+ * okhttp拦截器
  * An OkHttp Interceptor which persists and displays HTTP activity in your application for later inspection.
  */
 public final class NetSpyInterceptor implements Interceptor {
