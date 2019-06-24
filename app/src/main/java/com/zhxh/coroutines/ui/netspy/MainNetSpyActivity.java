@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
-import com.creditease.netspy.NetSpy;
+import com.creditease.netspy.NetSpyHelper;
 import com.creditease.netspy.NetSpyInterceptor;
-
 import com.zhxh.coroutines.R;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -46,8 +43,7 @@ public class MainNetSpyActivity extends AppCompatActivity {
     }
 
     private void launchNetSpyDirectly() {
-        // Optionally launch NetSpy directly from your own app UI
-        startActivity(NetSpy.getLaunchIntent(this));
+        NetSpyHelper.launchActivity(this);
     }
 
     private void doHttpActivity() {

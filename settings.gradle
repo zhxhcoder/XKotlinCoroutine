@@ -1,1 +1,1 @@
-include ':app', ':netspylib'
+include ':app'
