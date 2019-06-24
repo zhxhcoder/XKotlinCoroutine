@@ -1,35 +1,11 @@
 package com.creditease.netspy;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
-
-import com.creditease.netspy.internal.data.NetSpyContentProvider;
-import com.creditease.netspy.internal.data.HttpTransaction;
-import com.creditease.netspy.internal.data.LocalCupboard;
-import com.creditease.netspy.internal.support.NotificationHelper;
-import com.creditease.netspy.internal.support.RetentionManager;
-
-import java.io.EOFException;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.Headers;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okhttp3.internal.http.HttpHeaders;
-import okio.Buffer;
-import okio.BufferedSource;
-import okio.GzipSource;
-import okio.Okio;
+
+import java.io.IOException;
 
 /**
  * Created by zhxh on 2019/06/22
