@@ -31,7 +31,7 @@ repositories {
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation(name: 'netspylib-release', ext: 'aar')
+    implementation(name: 'cnetspy', ext: 'aar')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
