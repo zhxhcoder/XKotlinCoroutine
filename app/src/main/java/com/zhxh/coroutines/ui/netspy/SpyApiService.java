@@ -14,7 +14,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-class SampleApiService {
+class SpyApiService {
 
     static HttpbinApi getInstance(OkHttpClient client) {
         Retrofit retrofit = new Retrofit.Builder()

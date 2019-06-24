@@ -51,7 +51,7 @@ public class MainNetSpyActivity extends AppCompatActivity {
     }
 
     private void doHttpActivity() {
-        SampleApiService.HttpbinApi api = SampleApiService.getInstance(getClient(this));
+        SpyApiService.HttpbinApi api = SpyApiService.getInstance(getClient(this));
         Callback<Void> cb = new Callback<Void>() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -63,9 +63,9 @@ public class MainNetSpyActivity extends AppCompatActivity {
             }
         };
         api.get().enqueue(cb);
-        api.post(new SampleApiService.Data("posted")).enqueue(cb);
-        api.patch(new SampleApiService.Data("patched")).enqueue(cb);
-        api.put(new SampleApiService.Data("put")).enqueue(cb);
+        api.post(new SpyApiService.Data("posted")).enqueue(cb);
+        api.patch(new SpyApiService.Data("patched")).enqueue(cb);
+        api.put(new SpyApiService.Data("put")).enqueue(cb);
         api.delete().enqueue(cb);
 
     }
