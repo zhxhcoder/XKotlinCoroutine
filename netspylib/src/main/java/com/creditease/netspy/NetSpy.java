@@ -11,8 +11,8 @@ import com.creditease.netspy.internal.ui.NetSpyHomeActivity;
  */
 public class NetSpy {
 
-    public static Intent getLaunchIntent(Context context, boolean isSpy) {
-        if (isSpy) {
+    public static Intent getLaunchIntent(Context context) {
+        if (NetSpyInterceptor.isNetSpy) {
             return new Intent(context, NetSpyHomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         } else {
             return new Intent();

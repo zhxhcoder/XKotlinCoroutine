@@ -15,7 +15,7 @@ class KotlinNetService : BaseNetService() {
     }
 
     override fun getInterceptorList(): List<Interceptor> {
-        return listOf(NetSpyInterceptor(BaseApplication.instance), StethoInterceptor())
+        return listOf(NetSpyInterceptor(BaseApplication.instance, true), StethoInterceptor())
     }
 
     override val baseUrl: String

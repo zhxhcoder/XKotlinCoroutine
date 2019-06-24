@@ -66,10 +66,13 @@ public final class NetSpyInterceptor implements Interceptor {
     private boolean showNotification;
     private long maxContentLength = 250000L;
 
+    static boolean isNetSpy;
+
     /**
      * @param context The current Context.
      */
-    public NetSpyInterceptor(Context context) {
+    public NetSpyInterceptor(Context context, boolean isNetSpy) {
+        NetSpyInterceptor.isNetSpy = isNetSpy;
         this.context = context.getApplicationContext();
         notificationHelper = new NotificationHelper(this.context);
         showNotification = true;
@@ -113,6 +116,12 @@ public final class NetSpyInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+
+        if (!isNetSpy) {
+            Request request = chain.request();
+            return chain.proceed(request);
+        }
+
         Request request = chain.request();
 
         RequestBody requestBody = request.body();
@@ -254,8 +263,8 @@ public final class NetSpyInterceptor implements Interceptor {
     private boolean bodyHasUnsupportedEncoding(Headers headers) {
         String contentEncoding = headers.get("Content-Encoding");
         return contentEncoding != null &&
-            !contentEncoding.equalsIgnoreCase("identity") &&
-            !contentEncoding.equalsIgnoreCase("gzip");
+                !contentEncoding.equalsIgnoreCase("identity") &&
+                !contentEncoding.equalsIgnoreCase("gzip");
     }
 
     private boolean bodyGzipped(Headers headers) {
