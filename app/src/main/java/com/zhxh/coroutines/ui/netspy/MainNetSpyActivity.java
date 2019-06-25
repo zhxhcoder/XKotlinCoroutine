@@ -37,7 +37,7 @@ public class MainNetSpyActivity extends AppCompatActivity {
     private OkHttpClient getClient(Context context) {
         return new OkHttpClient.Builder()
                 // Add a NetSpyInterceptor instance to your OkHttp client
-                .addInterceptor(new NetSpyInterceptor(context, true))
+                .addInterceptor(new NetSpyInterceptor())
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build();
     }
