@@ -33,4 +33,13 @@
         android:text="netspy监听"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/btn_netspy_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="开启监听状态"
+        android:textAllCaps="false" />
+
 </LinearLayout>

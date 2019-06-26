@@ -16,6 +16,6 @@ class BaseApplication : Application() {
         super.onCreate()
         instance = this
 
-        NetSpyHelper.install(this, true)
+        NetSpyHelper.install(this)
     }
 }
