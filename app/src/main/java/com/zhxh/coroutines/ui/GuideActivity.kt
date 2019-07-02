@@ -3,7 +3,6 @@ package com.zhxh.coroutines.ui
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.creditease.netspy.NetSpyHelper
 import com.zhxh.coroutines.R
 import com.zhxh.coroutines.ui.netspy.MainNetSpyActivity
 import kotlinx.android.synthetic.main.activity_guide.*
@@ -23,10 +22,6 @@ class GuideActivity : AppCompatActivity() {
         }
         btn_netspy.setOnClickListener {
             startActivity(Intent(this@GuideActivity, MainNetSpyActivity::class.java))
-        }
-        btn_netspy_open.setOnClickListener {
-
-            NetSpyHelper.debug(true)
         }
     }
 }
