@@ -4,10 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.widget.CheckBox;
+import android.widget.Toast;
+
 import com.creditease.netspy.NetSpyHelper;
 import com.creditease.netspy.NetSpyInterceptor;
 import com.zhxh.coroutines.R;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -20,26 +23,22 @@ public class MainNetSpyActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_netspy);
-        findViewById(R.id.do_http).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doHttpActivity();
-            }
-        });
-        findViewById(R.id.launch_netspy_directly).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                launchNetSpyDirectly();
-            }
+        findViewById(R.id.do_http).setOnClickListener(view -> doHttpActivity());
+        findViewById(R.id.launch_netspy_directly).setOnClickListener(view -> launchNetSpyDirectly());
+
+        CheckBox checkBox = findViewById(R.id.cb_netspy_status);
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Toast.makeText(MainNetSpyActivity.this, "是否开启 " + isChecked, Toast.LENGTH_LONG).show();
+            NetSpyHelper.debug(isChecked);
         });
     }
 
     private OkHttpClient getClient(Context context) {
         return new OkHttpClient.Builder()
-                // Add a NetSpyInterceptor instance to your OkHttp client
-                .addInterceptor(new NetSpyInterceptor())
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                .build();
+            // Add a NetSpyInterceptor instance to your OkHttp client
+            .addInterceptor(new NetSpyInterceptor())
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .build();
     }
 
     private void launchNetSpyDirectly() {
