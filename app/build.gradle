@@ -51,5 +51,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'org.greenrobot:greendao:3.2.2'
-    implementation 'com.creditease:netspylib:2.0.4'
+    implementation 'com.creditease:netspylib:3.0.0'
 }
