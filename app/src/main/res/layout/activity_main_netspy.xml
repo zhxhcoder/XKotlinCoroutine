@@ -32,5 +32,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:text="是否开启监听" />
+        android:text="是否开启网络监听" />
+    <CheckBox
+        android:id="@+id/cb_bugspy_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="是否开启异常监听" />
 </LinearLayout>
