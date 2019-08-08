@@ -152,7 +152,7 @@ class MainMVPActivity : AppCompatActivity(), MainContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_mvp)
 
-        presenter.subscribe(this)
+        presenter.subscribe()
         syncWithContextBtn.setOnClickListener {
             presenter.syncWithContext()
         }
